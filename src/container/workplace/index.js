@@ -2,7 +2,8 @@
  * @file 设备-工作台
  */
 import React, { PureComponent } from 'react';
-import { List, Card, Icon, Grid } from 'antd-mobile'
+import { List, Card, Icon, Grid, WhiteSpace } from 'antd-mobile';
+import { withRouter } from 'react-router-dom';
 import styles from './style.css';
 import CardTitle from './cardTitle';
 
@@ -18,10 +19,27 @@ const data = [
   }
 ]
 
+const data1 = [
+  {
+    text: '扫码报修',
+    icon: require('../../assets/scan02.svg'),
+    url: '/repair/1001',
+  },
+  {
+    text: '资产登记',
+    icon: require('../../assets/checkin.svg')
+  },
+  {
+    text: '资产档案',
+    icon: require('../../assets/assets.svg')
+  }
+]
+
 class Workplace extends PureComponent {
   render() {
+    const { history } = this.props;
     return (
-      <List className={styles.workplace_viewList}>
+      <List className={`workplace ${styles.workplace_viewList}`}>
         <Card className={styles.workplace_header} full>
           <Card.Header
             className={styles.workplace_header_body}
@@ -38,14 +56,19 @@ class Workplace extends PureComponent {
             }
           />
           <Card.Body style={{background: '#fff', padding: 0}}>
-            <Grid data={data} activeStyle={false} hasLine={false} itemStyle={{
- 
-            }} style={{padding: 0}}/>
+            <Grid data={data} activeStyle={false} hasLine={false}/>
           </Card.Body>
         </Card>
+        <WhiteSpace/>
+        <Grid 
+          data={data1} 
+          activeStyle={false} 
+          hasLine={true} 
+          onClick={(el, index) => history.push({pathname: el.url}) }
+        />
       </List>
     )
   }
 }
 
-export default Workplace;
+export default withRouter(Workplace);

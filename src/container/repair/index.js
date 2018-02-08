@@ -2,48 +2,70 @@
  * @file 设备-报修
  */
 import React, { PureComponent } from 'react';
-import { List, WhiteSpace, Radio, Modal, ImagePicker, InputItem,
-  Checkbox, Button, TextareaItem } from 'antd-mobile';
+import { List, WhiteSpace, Radio, Modal, ImagePicker, InputItem, Toast, Switch,
+  Checkbox, Button, TextareaItem } from 'antd-mobile';  
 import { createForm } from 'rc-form';  
 import { selectOption } from '../../constants';
 import styles from './style.css';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compressImage } from '../../utils';
-import { operation } from '../../service'
+import { operation } from '../../service';
+import { queryAssets } from '../../api/repair';
 const Item = List.Item;
 const Brief = Item.Brief;
 const CheckboxItem = Checkbox.CheckboxItem;
+const alert = Modal.alert;
 
 class RepairForm extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      useFstate: '',
-      urgentFlag: '',
-      spare: '',
-      faultDescribe: [],
-      visible: false,
-      files: [],
-      submitFiles:[],
-      imageVisible: false,
-      faultDescribeText: ''
+      assetsRecord: {
+        rrpairOrderGuid: '',
+        assetsRecord: '', //资产编号
+        equipmentName: '', // 资产名称
+        fmodel: '', // 型号
+        spec: '',// 规格
+        useFstate: '',// 是否在用
+        guaranteeFlag: '',// 是否在用
+        deposit: ''
+      },
+      useFstate: '', // 是否在用 - checkbox
+      urgentFlag: '', // 紧急度
+      spare: '', // 备用
+      failCause: '', // 故障描述 文字
+      faultDescribe: [], // 故障描述
+      visible: false, // 选择层 modal
+      files: [], // 展示图片
+      submitFiles:[], // 提交图片
+      imageVisible: false, // 图片 modal
+      faultDescribeText: '', // 故障描述  - text
+      rrpairPhone: '' // 维修电话
     }
   }
   onSubmit = () => {
-    console.log(this.props)
+    alert('报修', '是否确认报修', [
+      { text: '取消' },
+      {
+        text: '确认',
+        onPress: () => {
+          console.log(this.state)
+        }
+      },
+    ])
   }
   getPostData = () => {
 
   }
   goDetail = () => {
     const { history, setRepair, form } = this.props;
-    const { useFstate, file, spare, urgentFlag } = this.state;
+    const { useFstate, file, spare, urgentFlag, assetsRecord, faultDescribe, files, faultDescribeText } = this.state;
     history.push({
-      pathname: '/repair/100'
+      pathname: `/repair/detail/${assetsRecord.assetsRecordGuid}`
     })
     setRepair({
-      useFstate, file, spare, urgentFlag,
+      useFstate, file, spare, urgentFlag, assetsRecord, faultDescribe, files, faultDescribeText,
       ...form.getFieldsValue()
     });
   }
@@ -93,26 +115,55 @@ class RepairForm extends PureComponent {
       }
     }
   }
-  componentDidMount() {
-    if (this.props.repairReducer.repair) {
-      const { useFstate, file, moneys, phone, spare, urgentFlag } = this.props.repairReducer.repair;
-      console.log(useFstate, file, spare, urgentFlag)
-      this.setState({
-        useFstate, file, spare, urgentFlag
+  async componentWillMount() {
+    const { id } = this.props.match.params;
+    const { repairReducer } = this.props;
+    if (id && !repairReducer.assetsRecord.assetsRecordGuid) {
+      const data = await queryAssets({body: {rrpairOrderGuid: id}});
+      if (data.status && data.result) {
+        this.setState({ assetsRecord: data.result })
+      }
+    } else if (repairReducer.assetsRecord.assetsRecordGuid) {
+      this.setState({ ...repairReducer })
+    }else {
+      Toast.fail('没有访问该页面权限', 1);
+      this.props.history.push({
+        pathname: '/workplace'
       })
     }
   }
+  getColor = val => {
+    switch (val) {
+      case '维修':
+        return '#fadb14';
+      case '闲置':
+        return '#389e0d';
+      case '在用':
+        return '#08979c';
+      default:
+        return '#096dd9';
+    }
+  }
   render() {
-    const { useFstate, urgentFlag, spare, faultDescribeText,
-      faultDescribe, visible, files, imageVisible, imgSrc } = this.state;
+    const { useFstate, urgentFlag, spare, faultDescribeText, assetsRecord, rrpairPhone, failCause,
+      faultDescribe, visible, files, imageVisible, imgSrc, rrpairSend } = this.state;
     const { getFieldProps } = this.props.form;
     return (
       <List className={'repair_list'}>
         <Item multipleLine extra="详情" arrow="horizontal" onClick={this.goDetail}>
-          呼吸机   在保
+          { assetsRecord.equipmentName } 
+          <span 
+            className={styles.repair_tag_wrapper}
+            style={{background: assetsRecord.guaranteeFlag === '出保' ? '#ff4d4f' : '#389e0d'}}
+          >
+            { assetsRecord.guaranteeFlag }
+          </span>
+          <span className={styles.repair_tag_wrapper} style={{background: this.getColor(assetsRecord.useFstate)}}>
+            { assetsRecord.useFstate }
+          </span>
           <Brief>
-            <div>规格</div>
-            <div>型号</div>
+            <div>规格: { assetsRecord.spec }</div>
+            <div>型号: { assetsRecord.fmodel }</div>
           </Brief>
         </Item>
         <WhiteSpace size="sm"/>
@@ -192,6 +243,9 @@ class RepairForm extends PureComponent {
           style={{padding: 0}}
         >  
           <TextareaItem
+            {...getFieldProps('failCause', {
+              initialValue: failCause
+            })}  
             title={'故障描述'}
             placeholder='请输入故障描述'
             autoHeight
@@ -212,25 +266,33 @@ class RepairForm extends PureComponent {
         </Item>
         <WhiteSpace size="sm"/>
         <Item 
-          style={{padding: 0}}
         >  
-          <InputItem
-            {...getFieldProps('money3')}
-            placeholder="输入维修地址"
-            clear
-            moneyKeyboardAlign="left"
-          >维修地址</InputItem>
+          <div className={styles.card_item}>
+            <span className={styles.card_item_label}>维修地址</span>
+            <span className={styles.card_item_content}> { assetsRecord.deposit } </span>
+          </div>  
         </Item>
         <WhiteSpace size="sm"/>
         <Item 
           style={{padding: 0}}
         >  
           <InputItem
-            {...getFieldProps('phone')}
-            placeholder="输入维修电话"
+            {...getFieldProps('rrpairPhone', {
+              initialValue: rrpairPhone
+            })}
+            placeholder="输入联系电话"
             clear
             moneyKeyboardAlign="left"
-          >维修电话</InputItem>
+          >联系电话</InputItem>
+        </Item>
+        <Item extra={<Switch
+          {...getFieldProps('rrpairSend', {
+            initialValue: rrpairSend,
+            valuePropName: 'checked',
+          })}
+          platform="ios"
+          />}>  
+          是否送修
         </Item>
         <Modal
           className={styles.modalImage}   

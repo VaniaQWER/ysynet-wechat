@@ -1,13 +1,10 @@
-import { notification } from 'antd';
+import { Toast } from 'antd-mobile';
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
-  notification.error({
-    message: `请求错误 ${response.status}: ${response.url}`,
-    description: response.statusText,
-  });
+  Toast.fail(`请求错误: ${response.status}, ${response.url}`, 1)
   const error = new Error(response.statusText);
   error.response = response;
   throw error;
@@ -41,16 +38,10 @@ export default function promiseRequest(url, options) {
     .then(response => response.json())
     .catch((error) => {
       if (error.code) {
-        notification.error({
-          message: error.name,
-          description: error.message,
-        });
+        Toast.fail(`请求错误: ${error.name}, ${error.message}`, 1)
       }
       if ('stack' in error && 'message' in error) {
-        notification.error({
-          message: `请求错误: ${url}`,
-          description: error.message,
-        });
+        Toast.fail(`请求错误: ${url}, ${error.message}`, 1)
       }
       return error;
     });

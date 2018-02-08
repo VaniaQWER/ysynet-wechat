@@ -13,3 +13,20 @@
 .modalImage {
   width: 300px;
 }
+
+.repair_tag_wrapper {
+  margin-left: 10px;
+  font-size: 12px;
+  padding: 3px 6px;
+  color: #fff;
+  background: #73d13d;
+}
+
+.repair_detail_label {
+  width: 100px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: top;
+}
