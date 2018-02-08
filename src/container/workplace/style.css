@@ -1,0 +1,32 @@
+.workplace_viewList {
+  height: 100vh;
+}
+
+.workplace_header {
+  background: #fff;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.workplace_header_body {
+  background: #fafafa;
+  border-radius: 5px;
+}
+
+.workplace_avatar {
+  margin-top: 10px;
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.workplace_avatar_title {
+  padding: 0;
+  margin: 5px;
+  height: 20px;
+  max-width: 50vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

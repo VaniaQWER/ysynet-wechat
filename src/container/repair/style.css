@@ -1,0 +1,15 @@
+.card_item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card_item_label {
+  width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modalImage {
+  width: 300px;
+}
