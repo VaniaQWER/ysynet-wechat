@@ -9,9 +9,7 @@ class WaitForRepair extends PureComponent {
       <div>
         <ListViewScroll
           item={
-            obj => {
-              return <div style={{height: 150}}>12345</div>
-            }
+            obj => <div style={{height: 150}}> { obj.equipmetStandarName } </div>
           }
         />
       </div>

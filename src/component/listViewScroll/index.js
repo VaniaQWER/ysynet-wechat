@@ -44,7 +44,6 @@ class ListViewScroll extends PureComponent {
   componentDidUpdate() {
     document.body.style.overflow = 'hidden';
   }
-
   async componentDidMount() {
     const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
     this.rData = await this.genData();
