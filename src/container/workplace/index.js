@@ -13,7 +13,7 @@ const data = [
   },
   {
     text: <CardTitle title={'0'} subTitle={'待接修'} style={{fontSize: 20}}/>,
-    url: ''
+    url: '/waitForRepair'
   },
   {
     text: <CardTitle title={'3'} subTitle={'收藏夹'} style={{fontSize: 20}}/>,

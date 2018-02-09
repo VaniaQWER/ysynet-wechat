@@ -14,7 +14,7 @@ class AssetsShow extends PureComponent{
         }
     }
     render(){
-        const { history } = this.props;
+        //const { history } = this.props;
         const baseData = this.state;
         return (
             <div>
@@ -60,4 +60,4 @@ class AssetsShow extends PureComponent{
         )
     }
 }
-export default AssetsShow;
+export default withRouter(AssetsShow);

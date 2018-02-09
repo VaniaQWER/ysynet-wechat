@@ -4,7 +4,6 @@
 import React, { PureComponent } from 'react';
 import { WhiteSpace} from 'antd-mobile';
 import { checkList } from '../../constants';
-import styles from './style.css';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { operation } from '../../service'
