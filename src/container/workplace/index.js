@@ -12,7 +12,8 @@ const data = [
     text: <CardTitle title={'12'} subTitle={'我的报修'} style={{fontSize: 20}}/>,
   },
   {
-    text: <CardTitle title={'0'} subTitle={'我的保养'} style={{fontSize: 20}}/>,
+    text: <CardTitle title={'0'} subTitle={'待接修'} style={{fontSize: 20}}/>,
+    url: ''
   },
   {
     text: <CardTitle title={'3'} subTitle={'收藏夹'} style={{fontSize: 20}}/>,
@@ -56,7 +57,12 @@ class Workplace extends PureComponent {
             }
           />
           <Card.Body style={{background: '#fff', padding: 0}}>
-            <Grid data={data} activeStyle={false} hasLine={false}/>
+            <Grid 
+              data={data} 
+              activeStyle={false} 
+              hasLine={false} 
+              onClick={(el, index) => history.push({pathname: el.url}) }
+            />
           </Card.Body>
         </Card>
         <WhiteSpace/>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default function asyncComponent(importComponent) {
+export default function asyncComponent(importComponent, title) {
   class AsyncComponent extends Component {
     constructor(props) {
       super(props);
@@ -12,7 +12,7 @@ export default function asyncComponent(importComponent) {
 
     async componentDidMount() {
       const { default: component } = await importComponent();
-
+      document.querySelector('title').text = title;
       this.setState({
         component: component
       });
