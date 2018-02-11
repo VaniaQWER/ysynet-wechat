@@ -45,6 +45,7 @@ class Workplace extends PureComponent {
           <Card.Header
             className={styles.workplace_header_body}
             title={<CardTitle title={'萌萌的拖鞋酱'} subTitle={'石河子医院'}/>}
+            onClick={() => history.push({pathname:'/myinfo'}) }
             thumb={
               <img 
                 alt='头像'
