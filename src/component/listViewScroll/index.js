@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import { PullToRefresh, ListView } from 'antd-mobile';
 import promiseRequest from '../../utils/promise_request'
 
-const NUM_ROWS = 20;
+const NUM_ROWS = 10;
 let pageIndex = 0;
 
 class ListViewScroll extends PureComponent {
@@ -27,15 +27,16 @@ class ListViewScroll extends PureComponent {
   }
   async genData (pIndex = 0) {
     const dataArr = [];
-    const promiseData = await promiseRequest('getRepairRecordList', {
+    const promiseData = await promiseRequest(`${this.props.url}`, {
       body: {
         pagesize: NUM_ROWS,
         page: pIndex,
         ...this.props.queryParams
-      }
+      },
+      type:'type'
     });
-    const data = promiseData.result;
-    for (let i = 0; i < data.length; i++) {
+    const data = promiseData.result.rows || promiseData.result;
+    for (let i = 0; i < data.length ; i++) {
       dataArr.push(`row - ${(pIndex * NUM_ROWS) + i}`);
     }
     this.setState({ data });
@@ -44,6 +45,7 @@ class ListViewScroll extends PureComponent {
   componentDidUpdate() {
     document.body.style.overflow = 'hidden';
   }
+
   async componentDidMount() {
     const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
     this.rData = await this.genData();
