@@ -93,6 +93,13 @@ export const selectOption = {
     { text: "其他", value: "99" },
   ]
 }
+export const faultDescribeData ={
+  "00" : { text: "部分功能失效" },
+  "01" : { text: "开机后死机" },
+  "03" : { text: "性能指标偏离" },
+  "04" : { text: "不规则或偶发故障" },
+  "02" : { text: "其他" }
+} 
 //验收单
 export const checkList = [
   {
@@ -101,6 +108,7 @@ export const checkList = [
     rrpairOrderNo: 'AA180208000001',
     equipmentStandardName:"资产名称1",
     assetsRecord:'AS171218000001',
+    rrpairOrderGuid:'1',
     repairResult:'00',
     spec:'aaa',
     title: '耳鼻喉头颈外科综合治疗台（带影像系统…………）',
@@ -114,6 +122,7 @@ export const checkList = [
     rrpairOrderNo: 'AA180207000042',
     equipmentStandardName:"资产名称2",
     assetsRecord:'AS171218000002',
+    rrpairOrderGuid:'1',
     repairResult:'01',
     spec:'bbb',
     title: '耳鼻喉头颈外科综合治疗台（带影像系统…………）',
@@ -127,6 +136,7 @@ export const checkList = [
     rrpairOrderNo: 'AA180207000041',
     equipmentStandardName:"资产名称3",
     assetsRecord:'AS171218000003',
+    rrpairOrderGuid:'1',
     repairResult:'02',
     spec:'ccc',
     title: '耳鼻喉头颈外科综合治疗台（带影像系统…………）',
@@ -140,6 +150,7 @@ export const checkList = [
     rrpairOrderNo: 'AA180207000044',
     equipmentStandardName:"资产名称4",
     assetsRecord:'AS171218000004',
+    rrpairOrderGuid:'12',
     repairResult:'00',
     spec:'ddd',
     title: '耳鼻喉头颈外科综合治疗台（带影像系统…………）',
@@ -153,6 +164,7 @@ export const checkList = [
     rrpairOrderNo: 'AA180207000046',
     equipmentStandardName:"资产名称5",
     assetsRecord:'AS171218000002',
+    rrpairOrderGuid:'13',
     repairResult:'00',
     spec:'eee',
     title: '耳鼻喉头颈外科综合治疗台（带影像系统…………）',
@@ -166,6 +178,7 @@ export const checkList = [
     rrpairOrderNo: 'AA1802080000047',
     equipmentStandardName:"资产名称6",
     assetsRecord:'AS171218000002',
+    rrpairOrderGuid:'14',
     repairResult:'01',
     spec:'aaa',
     title: '耳鼻喉头颈外科综合治疗台（带影像系统…………）',

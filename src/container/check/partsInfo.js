@@ -3,57 +3,60 @@
  */
 import React, { PureComponent } from 'react';
 import { WhiteSpace, List } from 'antd-mobile';
-
+import { findFittingInfo } from '../../api/check';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { operation } from '../../service'
 const Item = List.Item;
 const Brief = Item.Brief;
 class PartInfo extends PureComponent{
     constructor(props) {
         super(props)
         this.state = {
-          parstData: [
-              {
-                "acceUnit": null, //单位
-                "acceNum": 1, //数量
-                "acceSpec": null, //规格
-                "equipmentCode": "AS171219000008", //设备编号
-                "money": 100, //金额
-                "assetsRecord": "AS171218000002-1", //附件编号
-                "unitPrice": 100, //单价
-                "RN": 1,
-                "acceName": "立式冷藏箱", //附件名称
-                "acceFmodel": null, //附件型号
-                "rrpairFittingUseGuid": "F3C47515524A435EB595FD1BD771B578" //维修附件使用guid
-              }
-          ]
+          partsInfo: []
         }
     }
-    componentWillMount = ()=>{
-
+    async componentWillMount(){
+        console.log(this.props.checkReducer,'reduce')
+        const { id } = this.props.match.params;
+        const { checkReducer } = this.props;
+        if(id && !checkReducer.BaseInfoInfoData.partsInfo){
+            const data = await findFittingInfo({body: {rrpairOrderGuid : id },type:'type'});
+            if(data.status){
+                this.setState({partsInfo: data.result.rows });
+            }
+        }else if(checkReducer.partsInfo){
+            this.setState({partsInfo: checkReducer.partsInfo });
+        }
     }
     render(){
-        const { parstData } = this.state;
+        const { partsInfo } = this.state;
         const partsItem = (item,index)=>{
             return (
             <Item  key={index} extra={<span style={{color:'green'}}>{`x${item.acceNum}`}</span>}>
                 <p>{item.acceName}</p>
-                <Brief>
-                    <p>型号/规格</p>
-                    <p>{`￥${item.unitPrice}`}</p>
-                </Brief>
+                {
+                    (item.acceFmodel&&item.acceSpec)
+                    &&
+                    <p><span style={{ marginRight: 8 }}>{item.acceFmodel}</span><span>{item.acceSpec}</span></p>
+                }
+                <p>{`￥${item.unitPrice}`}</p>
             </Item>)
         }
         return (<div>
                 <WhiteSpace />
                 <List renderHeader={() => '配件信息'}>
                     {
-                        parstData.map((item,index) => partsItem(item,index))
+                        partsInfo.map((item,index) => partsItem(item,index))
                     }
                 </List>
                 <div>
-                    <p>合计：<span>119</span></p>
+                    <p style={{marginLeft: 15,fontSize:18}}>合计：<span style={{color:'red'}}>119</span></p>
                 </div>
             </div>
         )
     }
 }
-export default PartInfo;
+export default withRouter(connect(state => state, dispatch => ({
+    getFitting: check => dispatch(operation.getFitting(check))
+  }))(PartInfo));

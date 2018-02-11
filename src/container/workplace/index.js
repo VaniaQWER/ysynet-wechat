@@ -16,6 +16,10 @@ const data = [
     url: '/waitForRepair'
   },
   {
+    text: <CardTitle title={'10'} subTitle={'待验收'} style={{fontSize: 20}}/>,
+    url: '/check'
+  },
+  {
     text: <CardTitle title={'3'} subTitle={'收藏夹'} style={{fontSize: 20}}/>,
   }
 ]

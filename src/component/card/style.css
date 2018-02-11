@@ -1,3 +1,32 @@
-.r-money-span{
-    color: red;
+.equ-title{
+    color: #333;
+    font-weight: 700;
+    font-size: 1.2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.repair-res{
+    font-size: 1rem;
+}
+.span-tag{
+    font-size: 12px;
+    padding: 5px 0 5px 15px;
+    margin: 1px 0;
+    text-align: left;
+    color: #fff;
+}
+.use-dept{
+    padding: 3px 6px;
+    background: rgb(106, 194, 11);
+    margin-right: 10px;
+}
+.urgent{
+    padding: 3px 6px;
+    background: rgb(255, 95, 62);
+}
+.acc-con{
+    color: #666;
+    font-size: .85rem;
+    line-height: normal;
 }

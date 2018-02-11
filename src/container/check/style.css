@@ -8,6 +8,26 @@ p{
 .am-tabs-pane-wrap p span{
     margin-left: 10px;
 } 
+.rep-No{
+    color: #333;
+    font-size: 1rem;
+}
+.span-bold{
+    font-weight: 700;
+}
+.fstate-span{
+    font-size: 12px;
+    padding: 3px 6px;
+    text-align: center;
+    background: red;
+    color: #fff;
+}
+.explain-span{
+    color: #666;
+    display: inline-block;
+    width: 100px;
+    font-weight: 700;
+}
 .ysynet-detail-foot{
     width: 100%;
     position: fixed;
@@ -57,7 +77,7 @@ p{
 /* 
     验收结果
 */
-.result-example .spe {
+.spe {
     width: 60px;
     height: 60px;
   }
@@ -74,15 +94,14 @@ p{
     min-height: 7.77vh;
     line-height: 40px;
     text-align: center;
-    border: 1px solid rgba(0, 0, 0, 0.45);
+    border: 1px solid #ddd;
     border-bottom: 0;
   }
 .table-row {
-    border-right: 1px solid rgba(0, 0, 0, 0.45);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+    border-bottom: 1px solid #ddd;
   }
   .am-list-body .table-span:last-child{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+   border-bottom: 1px solid #ddd;
   }
   .table-p-100{
      width: 100px;

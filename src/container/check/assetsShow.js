@@ -3,23 +3,20 @@
  */
 import React, { PureComponent } from 'react';
 import { List } from 'antd-mobile';
-import { withRouter } from 'react-router-dom';
+//import { withRouter } from 'react-router-dom';
 import styles from './style.css'
 const Item = List.Item;
 class AssetsShow extends PureComponent{
-    constructor(props) {
-        super(props)
-        this.state = {
-          baseData: {}
-        }
+    state = {
+        
     }
+    
     render(){
-        //const { history } = this.props;
-        const baseData = this.state;
+        console.log(this.props.location.state,'prop')
+        const baseData = this.props.location.state;
+        //console.log(baseData,'baseData111')
         return (
-            <div>
                 <div className={styles['ysy-assets']}>
-                    <div>
                         <List className={styles['table-row']} renderHeader={() => '基本资料'}>
                             <Item className={styles['table-span']}>
                                 <p className={styles['table-p-100']}>资产编码</p>
@@ -54,10 +51,8 @@ class AssetsShow extends PureComponent{
                                 <p>{baseData.guaranteeFlag==='01'?'在保':'出保'}</p>
                             </Item>
                         </List>
-                    </div>
                 </div>
-            </div>
         )
     }
 }
-export default withRouter(AssetsShow);
+export default AssetsShow;
