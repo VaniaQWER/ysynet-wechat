@@ -11,7 +11,6 @@
 }
 .span-tag{
     font-size: 12px;
-    padding: 5px 0 5px 15px;
     margin: 1px 0;
     text-align: left;
     color: #fff;
@@ -25,8 +24,4 @@
     padding: 3px 6px;
     background: rgb(255, 95, 62);
 }
-.acc-con{
-    color: #666;
-    font-size: .85rem;
-    line-height: normal;
-}
+

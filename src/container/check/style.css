@@ -1,34 +1,43 @@
-p{
+p {
     margin: 0;
     padding: 0;
 }
-.am-tabs-pane-wrap p{
+
+.am-tabs-pane-wrap p {
     margin: 11px 0 0;
 }
-.am-tabs-pane-wrap p span{
+
+.am-tabs-pane-wrap p span {
     margin-left: 10px;
-} 
-.rep-No{
+}
+
+.rep-No {
     color: #333;
     font-size: 1rem;
 }
-.span-bold{
+
+.span-bold {
     font-weight: 700;
+    display: inline-block;
+    width: 100px;
 }
-.fstate-span{
+
+.fstate-span {
     font-size: 12px;
     padding: 3px 6px;
     text-align: center;
     background: red;
     color: #fff;
 }
-.explain-span{
+
+.explain-span {
     color: #666;
     display: inline-block;
     width: 100px;
     font-weight: 700;
 }
-.ysynet-detail-foot{
+
+.ysynet-detail-foot {
     width: 100%;
     position: fixed;
     padding-top: 1.2vw;
@@ -37,73 +46,84 @@ p{
     bottom: 0;
     z-index: 99;
 }
-.mb_12{
+
+.mb_12 {
     margin-bottom: 12px;
 }
-.w_40{
+
+.w_40 {
     width: 40px;
 }
+
+
 /* 底部按钮 */
-.ysynet-detail-foot .button-group{
+
+.ysynet-detail-foot .button-group {
     display: flex;
     justify-content: flex-end;
 }
-.ysynet-detail-foot .button-group a{
+
+.ysynet-detail-foot .button-group a {
     font-size: 14px;
     text-align: center;
     margin-left: 10px;
     height: 30px;
     line-height: 30px;
-    padding:0 8px;
+    padding: 0 8px;
     border-radius: 2px;
     border: solid 1px #108ee9;
 }
-.foot-button a{
+
+.foot-button a {
     font-size: 18px;
     display: inline-block;
     width: 50%;
     padding: 2.2vh 0;
     text-align: center;
 }
-.foot-button .btn-cancel{
-    color:#108ee9;
+
+.foot-button .btn-cancel {
+    color: #108ee9;
     background: #fff;
 }
-.foot-button .btn-submit{
+
+.foot-button .btn-submit {
     background: #108ee9;
-    color:#fff;
+    color: #fff;
 }
+
 
 /* 
     验收结果
 */
+
 .spe {
     width: 60px;
     height: 60px;
-  }
+}
+
 
 /* 
   设备--详情-资产详情
 */
-.ysy-assets{
-    padding: 15px;
+
+.ysy-assets {
+    padding: 10px;
 }
-.table-span {
-    display: flex;
-    justify-content:flex-start;
-    min-height: 7.77vh;
-    line-height: 40px;
-    text-align: center;
-    border: 1px solid #ddd;
-    border-bottom: 0;
-  }
+
 .table-row {
     border-bottom: 1px solid #ddd;
-  }
-  .am-list-body .table-span:last-child{
-   border-bottom: 1px solid #ddd;
-  }
-  .table-p-100{
-     width: 100px;
-     float: left;
- }
+}
+
+.am-list-body .table-span:last-child {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-span {
+    width: 100px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
+}
