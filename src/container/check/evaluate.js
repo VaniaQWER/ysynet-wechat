@@ -2,7 +2,7 @@
  * @file 设备--验收完成
  */
 import React, { PureComponent } from 'react';
-import { Result, Icon, WhiteSpace,NavBar,List,TextareaItem,Button  } from 'antd-mobile';
+import { Result, Icon, WhiteSpace,List,TextareaItem,Button  } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import  styles from './style.css';
 const Item = List.Item;
@@ -11,17 +11,8 @@ class Evaluate extends PureComponent{
 
     }
     render(){
-        const { history } = this.props;
         const { getFieldProps } = this.props.form;
-        return (<div>
-            <NavBar
-                className={'ysynet-header'}
-                mode="dark"
-                icon={<Icon type="left" />}
-                onLeftClick={() => history.push({ pathname:`/check`})}
-            >
-            验收完成
-            </NavBar>
+        return (
             <div className="result-example">
                 <Result
                     img={<Icon type="check-circle" className={styles['spe']} style={{ fill: '#1F90E6' }} />}
@@ -41,10 +32,7 @@ class Evaluate extends PureComponent{
                         <Button type="primary" onClick={this.submit}>确定</Button>
                     </Item>
                 </List>
-
             </div>
-            <WhiteSpace />
-        </div>
         )
     }
 }

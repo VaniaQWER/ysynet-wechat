@@ -10,7 +10,17 @@ const setRepairMapper = repair => ({
   repair
 })
 
+// 详情
+const SET_CHECK_MAPPER = 'SET_CHECK_MAPPER';
+
+const setCheckMapper = check => ({
+  type: SET_CHECK_MAPPER,
+  check
+})
 
 export const setRepair = repair => (
   dispatch => dispatch(setRepairMapper(repair))
+)
+export const setCheckDetial = check=> (
+  dispatch => dispatch(setCheckMapper(check))
 )

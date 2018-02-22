@@ -12,3 +12,7 @@ export async function selectRrpairList(options) {
 export async function queryDetail(options) {
     return promiseRequest(`${_local}/meqm/rrpairOrderController/selectRrpairDetailList`, options);
 }
+//查询使用配件
+export async function findFittingInfo(options) {
+    return promiseRequest(`${_local}/meqm/rrpairOrderController/selectRrpairFittingList`, options);
+}

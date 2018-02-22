@@ -8,7 +8,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { operation } from '../../service'
 const Item = List.Item;
-const Brief = Item.Brief;
 class PartInfo extends PureComponent{
     constructor(props) {
         super(props)

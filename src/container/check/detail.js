@@ -47,8 +47,17 @@ class CheckDetail extends PureComponent{
     handOk = ()=>{
         alert('验收','是否确认收货？',[
             { text: '取消', onPress: () => console.log('取消'), style: 'default' },
-            { text: '确认', onPress: () => console.log('确认') },
+            { text: '确认', onPress: () => this.checkOk() },
           ])
+    }
+    checkOk = ()=>{
+        console.log(111111)
+        const { history } = this.props;
+        const pamars = {};
+        pamars.rrpairOrderGuid = this.props.location.state.rrpairOrderGuid;
+        pamars.rrAcceFstate = '65';
+        history.push({ pathname:`/check/evaluate`,state: pamars })
+
     }
     //验收不通过
     handNotPass = ()=>{
