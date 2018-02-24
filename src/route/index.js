@@ -3,18 +3,16 @@ import {
   HashRouter as Router, Switch, Route, Redirect
 } from 'react-router-dom';
 import RouteWithSubRoutes from './routeWithSubRoutes';
-import Workplace from '../container/workplace';
+import asyncComponent from './asyncComponent';
 import Repair from './repair';
 import WaitForRepair from './waitForRepair';
 import Check from './check';
-import asyncComponent from './asyncComponent';
+import StartToRepair from './startToRepair';
 const routes = [
   { path: '/login', exact: true, component: () => <div>Login</div> },
   { path: '/register', exact: true, component: () =>  <div>register</div> },
-  { path: '/workplace', exact: true, component: Workplace },
-  {path: '/myinfo', exact: true,component: asyncComponent(() => import("../container/workplace/myInfo"))}, 
-  {path: '/modifyUserName', exact: true,component: asyncComponent(() => import("../container/workplace/modifyUserName"))}, 
-  ...Repair, ...WaitForRepair, ...Check
+  { path: '/workplace', exact: true, component: asyncComponent(() => import("../container/workplace"), '我的工作台') },
+  ...Repair, ...WaitForRepair, ...Check, ...StartToRepair
 ]
 
 
@@ -27,6 +25,7 @@ const RouterMonitor = () => (
           <RouteWithSubRoutes key={i} {...route}/>
         ))
       }
+      <Route component={() => <div>404</div>} />
     </Switch>
   </Router>
 )

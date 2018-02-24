@@ -167,7 +167,9 @@ class RepairForm extends PureComponent {
           </Brief>
         </Item>
         <WhiteSpace size="sm"/>
-        <Item>
+        <Item
+          thumb={require('../../assets/useFstate_orange.svg')}
+        >
           <div className={styles.card_item}>
             <span>设备状态</span>
             <span>
@@ -188,7 +190,9 @@ class RepairForm extends PureComponent {
           </div>
         </Item>
         <WhiteSpace size="sm"/>
-        <Item>
+        <Item
+          thumb={require('../../assets/urgentFlag_orange.svg')}
+        >
           <div className={styles.card_item}>
             <span>紧急度</span>
             <span>
@@ -209,7 +213,9 @@ class RepairForm extends PureComponent {
           </div>
         </Item>
         <WhiteSpace size="sm"/>
-        <Item>
+        <Item
+          thumb={require('../../assets/spare_orange.svg')}
+        >
           <div className={styles.card_item}>
             <span className={styles.card_item_label}>备用</span>
             <span className={styles.card_item_content}>
@@ -231,6 +237,7 @@ class RepairForm extends PureComponent {
         </Item>
         <WhiteSpace size="sm"/>
         <Item 
+          thumb={require('../../assets/reason_orange.svg')}  
           multipleLine 
           extra={faultDescribeText} 
           arrow="horizontal"
@@ -240,8 +247,9 @@ class RepairForm extends PureComponent {
         </Item>
         <WhiteSpace size="sm"/>
         <Item 
-          style={{padding: 0}}
+          thumb={require('../../assets/failCause_orange.svg')}   
         >  
+        
           <TextareaItem
             {...getFieldProps('failCause', {
               initialValue: failCause
@@ -255,7 +263,8 @@ class RepairForm extends PureComponent {
         <WhiteSpace size="sm"/>
         <Item
         >  
-          故障图片(至多3张)
+          
+          <img style={{marginRight: 12}} src={require('../../assets/image_orange.svg')} alt=''/>  <span>故障图片(至多3张)</span>
           <ImagePicker
             files={files}
             onChange={this.imageUpdate}
@@ -266,6 +275,7 @@ class RepairForm extends PureComponent {
         </Item>
         <WhiteSpace size="sm"/>
         <Item 
+          thumb={require('../../assets/address_orange.svg')}
         >  
           <div className={styles.card_item}>
             <span className={styles.card_item_label}>维修地址</span>
@@ -274,7 +284,7 @@ class RepairForm extends PureComponent {
         </Item>
         <WhiteSpace size="sm"/>
         <Item 
-          style={{padding: 0}}
+          thumb={require('../../assets/telephone_orange.svg')}
         >  
           <InputItem
             {...getFieldProps('rrpairPhone', {
@@ -285,7 +295,9 @@ class RepairForm extends PureComponent {
             moneyKeyboardAlign="left"
           >联系电话</InputItem>
         </Item>
-        <Item extra={<Switch
+        <Item 
+          thumb={require('../../assets/rrpairSend_orange.svg')}
+          extra={<Switch
           {...getFieldProps('rrpairSend', {
             initialValue: rrpairSend,
             valuePropName: 'checked',

@@ -1,0 +1,24 @@
+/* 添加按钮 +  */
+.plus_container {
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 30px;
+  color: #ffa000;
+}
+
+/* 垂直tabs 缩小高度 */
+.tabs_vertical_container {
+  height: 100vh;
+  background: #fff;
+}
+/*********end********/
+
+.tabs_content {
+  display: flex;
+  align-items: top;
+  justify-content: center;
+  height: 100vh; 
+  background-color: #fafafa;
+}

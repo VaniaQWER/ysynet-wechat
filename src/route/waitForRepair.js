@@ -10,4 +10,9 @@ export default [{
   name: '接修详情', 
   exact: true,
   component: asyncComponent(() => import("../container/waitForRepair/detail"), '接修详情'),
+}, {
+  path: '/waitForRepair/:id/:result', 
+  name: '接修状态', 
+  exact: true,
+  component: asyncComponent(() => import("../container/waitForRepair/result"), '接修状态'),
 }]
