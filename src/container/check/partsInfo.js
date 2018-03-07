@@ -8,18 +8,19 @@ import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {operation} from '../../service'
 const Item = List.Item;
+const Brief = Item.Brief;
 class PartInfo extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            partsInfo: []
+            parts: []
         }
     }
     async componentWillMount() {
-        console.log(this.props.checkReducer, 'reduce')
+        console.log(this.props.partsReducer, 'reduce')
         const {id} = this.props.match.params;
-        const {checkReducer} = this.props;
-        if (id && !checkReducer.BaseInfoInfoData.partsInfo) {
+        const {partsReducer,setParts} = this.props;
+        if (id && !partsReducer.parts) {
             const data = await findFittingInfo({
                 body: {
                     rrpairOrderGuid: id
@@ -27,13 +28,14 @@ class PartInfo extends PureComponent {
                 type: 'type'
             });
             if (data.status) {
-                this.setState({partsInfo: data.result.rows});
+                setParts(data.result.rows);
+                this.setState({parts: data.result.rows});
             }
-        } else if (checkReducer.partsInfo) {
-            this.setState({partsInfo: checkReducer.partsInfo});
+        } else if (partsReducer.parts && partsReducer.parts.length) {
+            this.setState({parts: partsReducer.parts});
         }
     }
-    async total(record) {
+     total = (record)=> {
         let total = 0;
         record.map((item,index)=>{
             let amount = typeof item.acceNum === 'undefined'? 1:item.acceNum;
@@ -42,57 +44,46 @@ class PartInfo extends PureComponent {
         return `￥${total}` 
     }
     render() {
-        const {partsInfo} = this.state;
+        console.log(this.props,'props')
+        const {parts} = this.state;
         const partsItem = (item, index) => {
             return (
-                <Item
-                    key={index}
-                    extra={< span style = {{color:'green'}} > {
-                    `x${item.acceNum}`
-                } </span>}>
-                    <p>{item.acceName}</p>
-                    {(item.acceFmodel && item.acceSpec) && <p>
-                        <span
-                            style={{
-                            marginRight: 8
-                        }}>{item.acceFmodel}</span>
-                        <span>{item.acceSpec}</span>
-                    </p>
-}
-                    <p>{`￥${item.unitPrice}`}</p>
-                </Item>
+                <div key={index}>
+                    <Item 
+                        extra={< span style = {{color:'green'}} > {
+                        `x${item.acceNum}`
+                    } </span>}>
+                        <p>{item.acceName}</p>
+                        {
+                            (item.acceFmodel && item.acceSpec) 
+                            && 
+                            <Brief>
+                                <span style={{ marginRight: 8 }}>{item.acceFmodel}</span>
+                                <span>{item.acceSpec}</span>
+                            </Brief>
+                        }
+                        <Brief>{`￥${item.unitPrice}`}</Brief>
+                    </Item>
+                    <WhiteSpace size='md'/>
+                </div>
             )
         }
         return (
             <div>
-                {partsInfo.length > 0
+                {
+                    parts.length > 0
                     ? <div>
-                            <WhiteSpace/>
                             <List renderHeader={() => '配件信息'}>
-                                {partsInfo.map((item, index) => partsItem(item, index))
-}
+                                {parts.map((item, index) => partsItem(item, index))}
                             </List>
-                            <div>
-                                <p
-                                    style={{
-                                    marginLeft: 15,
-                                    fontSize: 18
-                                }}>合计：<span
-                                    style={{
-                            color: 'red'
-                        }}>{this.total(partsInfo)}</span>
-                                </p>
-                            </div>
+                            <p style={{marginLeft: 15, fontSize: 18}}>合计：<span style={{color: 'red' }}>{this.total(parts)}</span></p>                   
                         </div>
-                    : <p style={{
-                        textAlign: 'center'
-                    }}>暂无配件信息</p>
-}
-
+                    : <p>暂无配件信息</p>
+                }
             </div>
         )
     }
 }
 export default withRouter(connect(state => state, dispatch => ({
-    getFitting: check => dispatch(operation.getFitting(check))
+    setParts: parts => dispatch(operation.setParts(parts))
 }))(PartInfo));

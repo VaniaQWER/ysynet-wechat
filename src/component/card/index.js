@@ -2,12 +2,13 @@
  * @file card
  */
 import React, {PureComponent} from 'react';
-import {Card, List, Button} from 'antd-mobile';
+import {List, Button} from 'antd-mobile';
 import {faultDescribeData, selectOption} from '../../constants';
 import styles from './style.css';
 
 const Item = List.Item;
 const Brief = Item.Brief;
+
 class CardItem extends PureComponent {
     constructor(props) {
         super(props)
@@ -35,13 +36,38 @@ class CardItem extends PureComponent {
         return str.substring(0, str.length - 1);
     }
     render() {
+        const check_btn = (orderFstate)=>{
+            return (
+                <div
+                    style={{
+                    textAlign: 'right',
+                    marginRight: 15
+                }}>
+                    <Button
+                        style={{
+                        marginTop: 3
+                    }}
+                        type="ghost"
+                        size="small"
+                        inline
+                        onClick={() => this.props.onClick(item)}>{orderFstate === '10'
+                        ? '立即接修'
+                        : orderFstate === '30'
+                            ? '完成维修'
+                            : '去验收'}</Button>
+                </div>
+            )
+        }
         const item = this.props.data;
+        const {orderFstate, userType} = item;
         return (
-            <Card full>
+            <List>
                 <Item className={styles['equ-title']}>
                     {item.equipmentStandardName}
                 </Item>
-                {< Item onClick = {
+                {< Item
+                platform = "android"
+                onClick = {
                     () => this
                         .props
                         .onClick(item)
@@ -73,21 +99,15 @@ class CardItem extends PureComponent {
                                 : '')}
                     </Brief>
                 } </Item>}
-                <div
-                    style={{
-                    textAlign: 'right',
-                    marginRight: 15
-                }}>
-                    <Button
-                        style={{
-                        marginTop: 3
-                    }}
-                        type="primary"
-                        size="small"
-                        inline
-                        onClick={() => this.props.onClick(item)}>去验收</Button>
-                </div>
-            </Card>
+                {(userType === 'syks'&& orderFstate ==='50')?
+                    check_btn(orderFstate)
+                    :
+                    (userType !== 'syks'&& orderFstate !=='50')?
+                    check_btn(orderFstate)
+                    :
+                    null
+            }
+            </List>
         )
     }
 }

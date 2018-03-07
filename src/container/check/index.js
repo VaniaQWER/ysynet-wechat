@@ -15,18 +15,38 @@ class MyCheckList extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            url: assets.selectRrpairList
+            url: assets.selectRrpairList,
+            userId:'',
+            sessionId: '',
+            orderFstate:'',
+            userType: ''
         }
     }
+    async componentWillMount(){
+        const { userInfo } = this.props.userReducer;
+        const { userId } = userInfo;
+        const userType = this.props.userReducer.userInfo.groupName === undefined? null: this.props.userReducer.userInfo.groupName;
+        const { sessionId } = this.props.sessionReducer.session;
+        const orderFstate = this.props.checkReducer.BaseInfoInfoData.orderFstate === undefined?'50': this.props.checkReducer.BaseInfoInfoData.orderFstate
+        this.setState({userId, userType, sessionId, orderFstate });
+    }
     async onClick(record) {
-        const {history} = this.props;
+        const { history } = this.props;
+        const { orderFstate, userId, userType,sessionId} = this.state;
+        console.log(orderFstate, userId, userType,sessionId)
         const data = await queryDetail({
             body: {
                 rrpairOrderGuid: record.rrpairOrderGuid
             },
-            type: '1'
+            type: 'formData'
         });
         if (data.status) {
+            Toast.loading('加载中....', 1, () => {
+                orderFstate==='10'?
+                history.push({pathname: `/waitForRepair/detail/${userId}/${record.rrpairOrderGuid}/${userType}/${sessionId}`})
+                :
+                history.push({pathname: `/check/detail/${userId}/${orderFstate}/${record.rrpairOrderGuid}/${userType}/${sessionId}`});
+            })
             this
                 .props
                 .setCheckDetial({
@@ -39,24 +59,27 @@ class MyCheckList extends PureComponent {
                         ...record
                     }
                 });
-            Toast.loading('Loading....', 1, () => {
-                history.push({pathname: `/check/detail/${record.rrpairOrderGuid}`, state: record});
-            })
         }
     }
     render() {
+        console.log(this.props,'props');
+        const { orderFstate, userType ,userId, sessionId } = this.state;
+        console.log(orderFstate, userType ,userId, sessionId,'User')
         return (
             <ListViewScroll
                 url={this.state.url}
                 queryParams={{
-                orderFstate: '50'
+                sessionId: sessionId,
+                orderFstate: orderFstate
             }}
                 item={obj => {
-                return <CardItem
-                    data={obj}
+                 return (<CardItem
+                    data={{...obj,userType: userType}}
                     onClick={this
                     .onClick
-                    .bind(this)}/>
+                    .bind(this)}
+                    />
+                ) 
             }}/>
         )
     }

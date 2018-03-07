@@ -1,8 +1,7 @@
 const initialState = {
     BaseInfoInfoData:{
 
-    },
-    partsInfo:[]
+    }
   };
   const checkReducer = (state = initialState , action) => {
     switch (action.type) {

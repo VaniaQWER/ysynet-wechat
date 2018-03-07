@@ -26,7 +26,6 @@ p {
     font-size: 12px;
     padding: 3px 6px;
     text-align: center;
-    background: red;
     color: #fff;
 }
 
@@ -37,16 +36,40 @@ p {
     font-weight: 700;
 }
 
-.ysynet-detail-foot {
+.list_bottom {
     width: 100%;
+    background: #fff;
+    height: 47px;
     position: fixed;
-    padding-top: 1.2vw;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 99;
+    top: calc(100% - 47px);
+    border: 1px solid #e8e8e8;
 }
-
+.btn_right{
+    float: right;
+    width: 60%;
+}
+.checkBtn{
+    width: 50%;
+    display: inline-block;
+    outline: 0 none;
+    -webkit-appearance: none;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    text-align: center;
+    font-size: 14px;
+    height: 47px;
+    line-height: 47px;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    white-space: nowrap;
+    color: #000;
+    background-color: #fff;
+    color: #ffa000;
+    border: 1PX solid #e8e8e8;
+}
 .mb_12 {
     margin-bottom: 12px;
 }
@@ -55,62 +78,19 @@ p {
     width: 40px;
 }
 
-
-/* 底部按钮 */
-
-.ysynet-detail-foot .button-group {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.ysynet-detail-foot .button-group a {
-    font-size: 14px;
-    text-align: center;
-    margin-left: 10px;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 8px;
-    border-radius: 2px;
-    border: solid 1px #108ee9;
-}
-
-.foot-button a {
-    font-size: 18px;
-    display: inline-block;
-    width: 50%;
-    padding: 2.2vh 0;
-    text-align: center;
-}
-
-.foot-button .btn-cancel {
-    color: #108ee9;
-    background: #fff;
-}
-
-.foot-button .btn-submit {
-    background: #108ee9;
-    color: #fff;
-}
-
-
 /* 
     验收结果
 */
-
 .spe {
     width: 60px;
     height: 60px;
 }
-
-
 /* 
   设备--详情-资产详情
 */
-
-.ysy-assets {
-    padding: 10px;
+.ysychat_content{
+    padding-bottom: 49px;
 }
-
 .table-row {
     border-bottom: 1px solid #ddd;
 }
@@ -127,3 +107,19 @@ p {
     white-space: nowrap;
     vertical-align: top;
 }
+.repair_tag_wrapper {
+    margin-left: 10px;
+    font-size: 12px;
+    padding: 3px 6px;
+    color: #fff;
+    background: #73d13d;
+  }
+  
+  .repair_detail_label {
+    width: 100px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
+  }

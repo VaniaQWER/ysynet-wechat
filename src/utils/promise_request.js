@@ -21,7 +21,9 @@ export default function promiseRequest(url, options) {
   const defaultOptions = {
     credentials: 'include',
     mode: 'cors',
-    method: 'POST'
+    method: 'POST',
+    'Access-Control-Allow-Credentials': true
+
   };
   const newOptions = { ...defaultOptions, ...options };
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {

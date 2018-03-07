@@ -14,13 +14,22 @@ import {
 import {selectOption, faultDescribeData} from '../../constants'
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {operation} from '../../service'
+import {operation, user as userService,menu as menuService, session as sessionService } from '../../service'
 import {queryDetail, updateCheckStatus} from '../../api/check';
+import { pushMessage } from '../../api/assets'
 import styles from './style.css';
 const Item = List.Item;
 const Brief = Item.Brief;
 const CheckboxItem = Checkbox.CheckboxItem;
 const alert = Modal.alert;
+const tabs = [
+    {
+        title: '维修信息'
+    }, {
+        title: '报修信息'
+    }
+];
+
 class CheckDetail extends PureComponent {
     constructor(props) {
         super(props)
@@ -28,19 +37,26 @@ class CheckDetail extends PureComponent {
             visible: false,
             loading: false,
             notCause: '',
-            BaseInfoInfoData: {}
+            BaseInfoInfoData: {},
+            userId:'',
+            orderFstate: '', // 资产状态
+            rrpairOrderGuid: '', //单据Guid
+            userType:'',
+            sessionId:''
+
         }
     }
     async componentWillMount() {
-        console.log(this.props.checkReducer, 'reduce')
-        const {id} = this.props.match.params;
-        const {checkReducer} = this.props;
-        if (id && !checkReducer.BaseInfoInfoData.assetsRecordGuid) {
+        let { orderFstate, rrpairOrderGuid, userType, sessionId, userId } = this.state;
+        if(!this.props.userReducer.userId){
+            const { params } = this.props.match;
+            let { userId, orderFstate, sessionId, rrpairOrderGuid,userType } = params;
+            this.setState({ userId, orderFstate, sessionId, rrpairOrderGuid,userType });
             const data = await queryDetail({
                 body: {
-                    rrpairOrderGuid: id
+                    rrpairOrderGuid: rrpairOrderGuid
                 },
-                type: '1'
+                type: 'formData'
             });
             if (data.status) {
                 this.setState({
@@ -54,8 +70,13 @@ class CheckDetail extends PureComponent {
                     }
                 })
             }
-        } else if (checkReducer.BaseInfoInfoData.assetsRecordGuid) {
-            this.setState({BaseInfoInfoData: checkReducer.BaseInfoInfoData});
+        }else{
+            orderFstate = this.props.checkReducer.BaseInfoInfoData.orderFstate;
+            rrpairOrderGuid = this.props.checkReducer.BaseInfoInfoData.rrpairOrderGuid;
+            userType =  this.props.userReducer.userInfo.groupName;
+            sessionId = this.props.sessionReducer.session.sessionId;
+            this.setState({orderFstate, rrpairOrderGuid ,userType, userId, sessionId }); 
+            this.setState({ BaseInfoInfoData: this.props.checkReducer.BaseInfoInfoData })
         }
     }
     //验收通过
@@ -72,76 +93,157 @@ class CheckDetail extends PureComponent {
         ])
     }
     async checkOk() {
-        const {history} = this.props;
+        const { history, setCheckParmas } = this.props;
         const pamars = {};
-        pamars.rrpairOrderGuid = this.props.match.params.id;
+        pamars.rrpairOrderGuid = this.state.rrpairOrderGuid;
         pamars.rrAcceFstate = '65';
-        const data = await updateCheckStatus({body: pamars, type: 'type'});
-        console.log(data.result, 'result')
-        /*  if(data.status){
-                history.push({ pathname:`/check/evaluate` })
+        pamars.sessionId = this.state.sessionId;
+        pamars.userId = this.state.userId;
+        setCheckParmas(pamars);
+        this.setState({ loading: true });
+        const data = await updateCheckStatus({body: pamars, type: 'formData'});
+        this.setState({ loading: false })
+         if(data.status){
+                history.push({ pathname:`/check/evaluate`});
+                this.pushRepairMsg();
             }else{
                 Toast.fail(data.msg, 2);
-            } */
-        history.push({pathname: `/check/evaluate`, state: pamars})
-
+            }
     }
+    async pushRepairMsg() {
+        const { rrpairOrderGuid } = this.state;
+        const data = await pushMessage({ body:{ rrpairOrderGuid : rrpairOrderGuid },type: 'fromData' });
+        if(data.status){
+          console.log('推送成功');
+        }else{
+          console.log('出错啦....'+data.mag);
+        }
+      }
     //验收不通过
-    handNotPass = () => {
-        this.setState({visible: true})
+    handNotPass = (e) => {
+        e.stopPropagation();
+        this.setState({visible: true});
     }
     //验收不通过原因提交
     async optionSubmit() {
         if (!this.state.notCause) {
             Toast.fail('请选择验收不通过原因', 2);
         } else {
-            const {history} = this.props;
+            const {history, setCheckParmas } = this.props;
             const pamars = {};
-            pamars.rrpairOrderGuid = this.props.location.state.rrpairOrderGuid;
+            pamars.rrpairOrderGuid = this.state.rrpairOrderGuid;
             pamars.rrAcceFstate = '66';
             pamars.notCause = this.state.notCause;
+            pamars.sessionId = this.state.sessionId;
+            pamars.userId = this.state.userId;
             this.setState({loading: true});
-            const data = await updateCheckStatus({body: pamars, type: 'type'});
+            setCheckParmas(pamars);
+            const data = await updateCheckStatus({body: pamars, type: 'formData'});
             this.setState({loading: false});
             if (data.status) {
-                history.push({pathname: `/check/evaluate`})
+                history.push({pathname: `/check/evaluate`});
+                this.pushRepairMsg();
             } else {
                 Toast.fail(data.msg, 2);
             }
         }
     }
-    handlefaultDescribeData = (text) => {
+    handlefaultDescribeData = (res) => {
         let str = '';
-        if (text) {
-            text.map((item) => {
-                return str += faultDescribeData[item]
-                    ? faultDescribeData[item].text + ","
-                    : ''
-            })
+        if (res) {
+            if (/^0./.test(res[0])) {
+                res.map((item) => {
+                    return str += faultDescribeData[item]
+                        ? faultDescribeData[item].text + ","
+                        : ''
+                })
+            } else {
+                res.map((item) => {
+                    return str += item
+                        ? item + ","
+                        : ''
+                })
+            }
         }
-        return str.substring(0,str.length-1);
+        return str.substring(0, str.length - 1);
+    }
+   
+    getColor = val => {
+        switch (val) {
+            case '维修':
+                return '#fadb14';
+            case '闲置':
+                return '#389e0d';
+            case '00':
+                return '#08979c';
+            default:
+                return '#096dd9';
+        }
+    }
+    showFstate = (val)=>{
+        switch (val){
+            case '10':
+                return <span style={{color: 'blue'}}>待接修</span>
+            case '30':
+                return <span style={{color: 'green'}}>维修中</span>
+            case '50':
+                return <span style={{ color: 'orange'}}>待验收</span>
+            default:
+                return null
+        }
     }
     render() {
         const {history} = this.props;
-        const {visible, notCause} = this.state;
-        const tabs = [
-            {
-                title: '维修信息'
-            }, {
-                title: '报修信息'
-            }
-        ];
+        const {visible, notCause, orderFstate, rrpairOrderGuid ,userType } = this.state;
         const baseData = this.state.BaseInfoInfoData;
-        console.log(baseData, 'baseData');
-        console.log(this.props, 'props')
+        console.log(orderFstate, rrpairOrderGuid ,userType)
+        const syks_btn = ()=>{
+            return (
+            <div className={styles.list_bottom}>
+                <div className={styles.btn_right}>
+                    <a className={styles.checkBtn} onClick={this.handNotPass}><span>验收不通过</span></a>
+                    <Button
+                        type='primary'
+                        inline
+                        style={{
+                        fontSize:14,
+                        borderRadius: 0,
+                        width: '50%'
+                    }}
+                        loading={this.state.loading}
+                        onClick={this.handOk}>
+                        验收通过
+                    </Button>
+                </div>
+            </div>
+            )
+        }
+        const repair_btn = ()=>{
+            return (
+                <div className={styles.list_bottom}>
+                    <div className={styles.btn_right}>
+                        <Button
+                            type='primary'
+                            inline
+                            style={{
+                            borderRadius: 0,
+                            width: '50%'
+                        }}
+                            onClick={()=>history.push({ pathname:`/startToRepair/stepOne/${rrpairOrderGuid}` })}>
+                            开始维修
+                        </Button>
+                    </div>
+                </div> 
+            )
+        }
         return (
-            <div className={'ysychat-content'}>
+            <div className={styles.ysychat_content}>
                 <List>
                     <Item
                         multipleLine
                         extra={< span className = {
                         styles['fstate-span']
-                    } > 待验收 </span>}>
+                    } > {this.showFstate(orderFstate)} </span>}>
                         <span className={styles['span-bold']}>维修单号:
                         </span>
                         <span className={styles['rep-No-span']}>{baseData.rrpairOrderNo}</span>
@@ -151,11 +253,37 @@ class CheckDetail extends PureComponent {
                         multipleLine
                         arrow="horizontal"
                         onClick={() => history.push({pathname: `/check/assetsShow`, state: baseData})}>
-                        <span>{baseData.equipmentStandardName}</span>
-                        <Brief>
-                            <span>型号/规格:
+                        <span
+                            style={{
+                            fontWeight: 700
+                        }}>
+                            {baseData.equipmentStandardName}
+                        </span>
+                        {
+                            (baseData.guaranteeFlag !== undefined && baseData.guaranteeFlag!==null) && 
+                            <span
+                                className={styles.repair_tag_wrapper}
+                                style={{
+                                background: baseData.guaranteeFlag === '出保'
+                                    ? '#ff4d4f'
+                                    : '#389e0d'
+                            }}>
+                                {baseData.guaranteeFlag}
                             </span>
-                            <span>{baseData.spec}</span>
+                        }
+                        <span
+                            className={styles.repair_tag_wrapper}
+                            style={{
+                            background: this.getColor(baseData.useFstate)
+                        }}>
+                            {baseData.useFstate === '00'
+                                ? '停用'
+                                : '在用'}
+                        </span>
+                        <Brief>
+                            <span>型号:{baseData.spec}</span>
+                            /
+                            <span>规格: {baseData.fmodel}</span>
                             <br/>
                             <span>资产编号:
                             </span>
@@ -219,7 +347,7 @@ class CheckDetail extends PureComponent {
                                 multipleLine
                                 onClick={() => history.push({pathname: `/check/parts/${baseData.rrpairOrderGuid}`})}
                                 extra={< span style = {{color:'red'}} > {
-                                `￥${ 180}`
+                                `${ baseData.actualPrice===undefined||baseData.actualPrice===null?'':'￥'+baseData.actualPrice}`
                             } </span>}
                                 arrow="horizontal">
                                 <span className={styles['explain-span']}>维修费用</span>
@@ -227,7 +355,7 @@ class CheckDetail extends PureComponent {
                             <WhiteSpace/>
                             <Item
                                 extra={< span > {
-                                `￥${ 180}`
+                                `${ baseData.actualPrice===undefined||baseData.actualPrice===null?'':'￥'+baseData.actualPrice }`
                             } </span>}>
                                 <span className={styles['explain-span']}>配件费用</span>
                             </Item>
@@ -313,16 +441,24 @@ class CheckDetail extends PureComponent {
                         </Item>
                     </List>
                 </Modal>
-                <div className={styles['ysynet-detail-foot']}>
-                    <div className={styles['foot-button']}>
-                        <a className={styles['btn-cancel']} onClick={this.handNotPass}>验收不通过</a>
-                        <a className={styles['btn-submit']} onClick={this.handOk}>验收通过</a>
-                    </div>
-                </div>
+                {
+                    (userType === 'syks'&& orderFstate === '50')? 
+                    syks_btn()
+                    :
+                    (userType !== 'syks'&& orderFstate === '30')?
+                    repair_btn()
+                    :
+                    null
+                }
+
             </div>
         )
     }
 }
 export default withRouter(connect(state => state, dispatch => ({
-    setCheckDetial: check => dispatch(operation.setCheckDetial(check))
+    setUser: user => dispatch(userService.setUserInfo(user)),
+    setMenu: menu =>dispatch(menuService.setMenu(menu)),
+    setSessionId: id => dispatch(sessionService.setSessionId(id)),
+    setCheckParmas: parmas => dispatch(operation.setCheckParmas(parmas)),
+    setCheckDetial: check => dispatch(operation.setCheckDetial(check)),
 }))(CheckDetail));

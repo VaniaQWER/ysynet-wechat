@@ -1,0 +1,44 @@
+.welcome {
+    /* background-image: url(../../assets/welcome-bg.jpg);
+    background-size: cover; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+.logo {
+    background-image: url(../../assets/logo80x80.png);
+    background-size: 100% 100%;
+    margin: 7vh auto 2vh;
+    width: 80px;
+    height: 80px;
+  }
+  .loginForm{
+    padding: 1.5vh 0;
+  }
+  .loginItem{
+    margin-top: 10px;
+    border-radius: 40px
+  }
+  .userRegHeader{
+    padding: 5px 0;
+    margin: 15px 0;
+    font-size: 22px;
+    color: #555;
+    text-align: center;
+  }
+  .userRegfooter{
+    margin: 10px 0 20px;
+    color:red;
+  }
+  .reg_btn{
+    margin-top: 5vh;
+    border-radius: 40px;
+  }
+  .footMsg{
+    color: #666;
+    opacity: .5;
+    margin-top: 12px;
+    line-height: 24px;
+  }

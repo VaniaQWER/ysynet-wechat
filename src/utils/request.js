@@ -1,10 +1,10 @@
-import { notification } from 'antd';
+import { Toast } from 'antd-mobile';
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response.json();
   }
-  notification.error({
+  Toast.error({
     message: `请求错误 ${response.status}: ${response.url}`,
     description: response.statusText,
   });
@@ -41,13 +41,13 @@ export default function request(url, options, callback) {
     .then(data => typeof newOptions.success === 'function' ? newOptions.success(data) : null)
     .catch((error) => {
       if (error.code) {
-        notification.error({
+        Toast.error({
           message: error.name,
           description: error.message,
         });
       }
       if ('stack' in error && 'message' in error) {
-        notification.error({
+        Toast.error({
           message: `请求错误: ${url}`,
           description: error.message,
         });

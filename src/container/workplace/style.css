@@ -30,3 +30,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.extra_Text{
+  padding-right: 15px;
+}
+.construct{
+  margin-top: 70px;
+}
+.result {
+  height:39.999vh;
+  background: url('../../assets/do@2x.png');
+  background-size: 100% 100%;
+}

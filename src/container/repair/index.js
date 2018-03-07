@@ -10,8 +10,8 @@ import styles from './style.css';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compressImage } from '../../utils';
-import { operation } from '../../service';
-import { queryAssets } from '../../api/repair';
+import { operation, user as userService, menu as menuService, session as sessionService } from '../../service';
+import { queryAssets,insertNewAssets } from '../../api/repair';
 const Item = List.Item;
 const Brief = Item.Brief;
 const CheckboxItem = Checkbox.CheckboxItem;
@@ -41,22 +41,56 @@ class RepairForm extends PureComponent {
       submitFiles:[], // 提交图片
       imageVisible: false, // 图片 modal
       faultDescribeText: '', // 故障描述  - text
-      rrpairPhone: '' // 维修电话
+      rrpairPhone: '', // 维修电话
+      rrpairSend: false, //是否送修
+      loading: false,
+      sessionId: '',
+      userId:''
     }
   }
-  onSubmit = () => {
+   onSubmit = () => {
     alert('报修', '是否确认报修', [
       { text: '取消' },
       {
         text: '确认',
-        onPress: () => {
-          console.log(this.state)
-        }
+        onPress: () =>  this.submitReg()
       },
     ])
   }
+  async submitReg (){
+    const { history } = this.props;
+    console.log(history,'history')
+    let { userId, sessionId } = this.state;
+    console.log(this.getPostData());
+    let postData = this.getPostData();
+    postData.sessionId = this.state.sessionId;
+    this.setState({ loading: true });
+    const data = await insertNewAssets({body: postData,type: 0 });
+    this.setState({ loading: false });
+    if(data.status){
+      Toast.success('报修成功', 1, () => history.push({pathname:`/workplace/${userId}/${sessionId}`}));
+    }else{
+      Toast.fail('出错啦'+ data.msg)
+    }
+  }
+  
   getPostData = () => {
-
+    const { assetsRecord } = this.state;
+    let params = {
+      assetsRecordGuid: assetsRecord.assetsRecordGuid,
+      isRepairs: true,
+      orderFstate: '10',
+      equipmentCode: assetsRecord.equipmentCode,
+      urgentFlag: this.state.urgentFlag,
+      rrpairSend: this.state.rrpairSend,
+      spare: this.state.spare,
+      rrpairPhone: this.state.rrpairPhone,
+      faultDescribe: this.state.faultDescribe,
+      failCause: this.state.failCause,
+      useFstate: assetsRecord.useFstate,
+      tfAccessory: this.state.submitFiles
+    }; 
+    return params;
   }
   goDetail = () => {
     const { history, setRepair, form } = this.props;
@@ -116,21 +150,30 @@ class RepairForm extends PureComponent {
     }
   }
   async componentWillMount() {
-    const { id } = this.props.match.params;
-    const { repairReducer } = this.props;
-    if (id && !repairReducer.assetsRecord.assetsRecordGuid) {
-      const data = await queryAssets({body: {rrpairOrderGuid: id}});
-      if (data.status && data.result) {
-        this.setState({ assetsRecord: data.result })
-      }
-    } else if (repairReducer.assetsRecord.assetsRecordGuid) {
-      this.setState({ ...repairReducer })
-    }else {
-      Toast.fail('没有访问该页面权限', 1);
+    let { userId, sessionId, assetsRecordGuid, groupName } = this.props.match.params;
+      if( groupName === 'syks'){
+        const { repairReducer } = this.props;
+        this.setState({ userId, sessionId });
+        if (assetsRecordGuid && !repairReducer.assetsRecord.assetsRecordGuid) {
+          const data = await queryAssets({body: {assetsRecordGuid: assetsRecordGuid},type:'formData'});
+          if (data.status && data.result) {
+            this.setState({ assetsRecord: data.result,sessionId: sessionId })
+          }
+        } else if (repairReducer.assetsRecord.assetsRecordGuid) {
+          this.setState({ ...repairReducer })
+        }else {
+          Toast.fail('没有访问该页面权限', .5);
+          this.props.history.push({
+            pathname: `/workplace/${userId}/${sessionId}`
+          })
+        }
+    }else{
+      Toast.fail('没有访问该页面权限', .5);
       this.props.history.push({
-        pathname: '/workplace'
+        pathname: `/workplace/${userId}/${sessionId}`
       })
     }
+    
   }
   getColor = val => {
     switch (val) {
@@ -145,6 +188,7 @@ class RepairForm extends PureComponent {
     }
   }
   render() {
+    console.log(this.props,'props')
     const { useFstate, urgentFlag, spare, faultDescribeText, assetsRecord, rrpairPhone, failCause,
       faultDescribe, visible, files, imageVisible, imgSrc, rrpairSend } = this.state;
     const { getFieldProps } = this.props.form;
@@ -159,7 +203,7 @@ class RepairForm extends PureComponent {
             { assetsRecord.guaranteeFlag }
           </span>
           <span className={styles.repair_tag_wrapper} style={{background: this.getColor(assetsRecord.useFstate)}}>
-            { assetsRecord.useFstate }
+            { assetsRecord.useFstate === '00'?'停用':'在用' }
           </span>
           <Brief>
             <div>规格: { assetsRecord.spec }</div>
@@ -182,7 +226,7 @@ class RepairForm extends PureComponent {
                     checked={ i.value === useFstate } 
                     onChange={() => this.onChange('useFstate', i.value)}
                   >
-                    {i.text}
+                    {i.text==='否'?'在用':'停用'}
                   </Radio>
                 ))
               }
@@ -256,6 +300,7 @@ class RepairForm extends PureComponent {
             })}  
             title={'故障描述'}
             placeholder='请输入故障描述'
+            onChange={v => this.setState({failCause: v })}
             autoHeight
             labelNumber={5}
           />  
@@ -292,7 +337,9 @@ class RepairForm extends PureComponent {
             })}
             placeholder="输入联系电话"
             clear
+            type="phone"
             moneyKeyboardAlign="left"
+            onChange={v => this.setState({ rrpairPhone: v })}
           >联系电话</InputItem>
         </Item>
         <Item 
@@ -302,6 +349,7 @@ class RepairForm extends PureComponent {
             initialValue: rrpairSend,
             valuePropName: 'checked',
           })}
+          onClick={(checked) => this.setState({ rrpairSend: checked? '01':'00' }) }
           platform="ios"
           />}>  
           是否送修
@@ -339,12 +387,15 @@ class RepairForm extends PureComponent {
           </List>
         </Modal>
         <WhiteSpace size="sm"/>
-        <Button type="primary" onClick={this.onSubmit}>报修</Button>
+        <Button type="primary" onClick={this.onSubmit} loading={this.state.loading}>报修</Button>
       </List>
     )
   }
 }
 const Repair = createForm()(RepairForm);
 export default withRouter(connect(state => state, dispatch => ({
+  setUser: user => dispatch(userService.setUserInfo(user)),
+  setMenu: menu =>dispatch(menuService.setMenu(menu)),
+  setSessionId: id => dispatch(sessionService.setSessionId(id)),
   setRepair: repair => dispatch(operation.setRepair(repair))
 }))(Repair));

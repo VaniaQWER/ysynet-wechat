@@ -5,9 +5,9 @@
 import asyncComponent from './asyncComponent';
 export default [{ 
     path: '/check', 
-    name: '我的验收', 
+    name: '报修单', 
     exact: true,
-    component: asyncComponent(() => import("../container/check"),'我的验收'),
+    component: asyncComponent(() => import("../container/check"),'报修单'),
   }, {
     path: '/check/evaluate', 
     name: '验收评价', 
@@ -24,8 +24,7 @@ export default [{
     exact: true,
     component: asyncComponent(() => import("../container/check/partsInfo"),'配件详情'),
   },{
-    path: '/check/detail/:id', 
-    name: '验收详情', 
-    exact: true,
-    component: asyncComponent(() => import("../container/check/detail"),'验收详情'),
+    path: '/check/detail/:userId/:orderFstate/:rrpairOrderGuid/:userType/:sessionId', 
+    name: '报修单详情', 
+    component: asyncComponent(() => import("../container/check/detail"),'报修单详情'),
   },]

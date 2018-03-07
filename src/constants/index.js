@@ -99,5 +99,4 @@ export const faultDescribeData ={
   "03" : { text: "性能指标偏离" },
   "04" : { text: "不规则或偶发故障" },
   "02" : { text: "其他" }
-} 
-
+}

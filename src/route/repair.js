@@ -1,9 +1,8 @@
 import asyncComponent from './asyncComponent';
 
 export default [{ 
-  path: '/repair/:id', 
-  name: '资产报修', 
-  exact: true,
+  path: '/repair/repairReg/:userId/:assetsRecordGuid/:groupName/:sessionId', 
+  name: '资产报修',
   component: asyncComponent(() => import("../container/repair"), '资产报修'),
 }, {
   path: '/repair/detail/:id', 

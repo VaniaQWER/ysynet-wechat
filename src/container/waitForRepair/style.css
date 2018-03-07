@@ -5,7 +5,7 @@
 
 .tabs_body {
   width: 100%;
-  padding: 5px 0;
+  padding: 5px 0 5px 15px;
   align-items: center;
   justify-content: center;
   min-height: 200px;
