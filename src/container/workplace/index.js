@@ -76,7 +76,6 @@ class Workplace extends PureComponent {
         return null;
       });
     }
-    
     return list
   }
   MuneText = (val,userType)=>{
@@ -176,9 +175,8 @@ class Workplace extends PureComponent {
   }
   goNextStep = (el,index)=>{
     const { setCheckDetial, history } = this.props;
-    const { userType } = this.state;
     setCheckDetial({BaseInfoInfoData:{ orderFstate: el.code }});
-    history.push({ pathname: el.url ,state:{ orderFstate: el.code, userType: userType}}) 
+    history.push({ pathname: `${el.url}`}) 
   }
   render() {
     console.log(this.props,'porps')

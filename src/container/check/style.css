@@ -23,6 +23,7 @@ p {
 }
 
 .fstate-span {
+    float: right;
     font-size: 12px;
     padding: 3px 6px;
     text-align: center;
@@ -41,12 +42,15 @@ p {
     background: #fff;
     height: 47px;
     position: fixed;
+    z-index: 99;
     top: calc(100% - 47px);
     border: 1px solid #e8e8e8;
+    
 }
 .btn_right{
     float: right;
     width: 60%;
+    text-align: right;
 }
 .checkBtn{
     width: 50%;
@@ -69,6 +73,7 @@ p {
     background-color: #fff;
     color: #ffa000;
     border: 1PX solid #e8e8e8;
+    border-top: none;
 }
 .mb_12 {
     margin-bottom: 12px;
@@ -89,7 +94,7 @@ p {
   设备--详情-资产详情
 */
 .ysychat_content{
-    padding-bottom: 49px;
+    padding-bottom: 47px;
 }
 .table-row {
     border-bottom: 1px solid #ddd;

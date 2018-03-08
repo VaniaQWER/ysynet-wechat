@@ -17,11 +17,22 @@ class WaitForRepair extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-        url: assets.selectRrpairList
+        url: assets.selectRrpairList,
+        userId:'',
+        sessionId: '',
+        userType: ''
     }
   }
+  async componentWillMount(){
+    const { userInfo } = this.props.userReducer;
+    const { userId } = userInfo;
+    const userType = this.props.userReducer.userInfo.groupName === undefined? null: this.props.userReducer.userInfo.groupName;
+    const { sessionId } = this.props.sessionReducer.session;
+    this.setState({userId, userType, sessionId });
+  }
   async onClick(record) {
-    const {history} = this.props;
+    const { history } = this.props;
+    const { userId, userType, sessionId } = this.state;
     const data = await queryDetail({
         body: {
             rrpairOrderGuid: record.rrpairOrderGuid
@@ -43,10 +54,9 @@ class WaitForRepair extends PureComponent {
             });
         Toast.loading('加载中....', 1, () => {
             record.orderFstate==='10'?
-            history.push({pathname: `/waitForRepair/detail`, state: record})
+            history.push({pathname: `/waitForRepair/detail/${userId}/${record.rrpairOrderGuid}/${userType}/${sessionId}`})
             :
-            history.push({pathname: `/startToRepair/stepOne/100`, state: record});
-
+            history.push({pathname: `/check/detail/${userId}/${record.orderFstate}/${record.rrpairOrderGuid}/${userType}/${sessionId}`});
         })
     }
   }

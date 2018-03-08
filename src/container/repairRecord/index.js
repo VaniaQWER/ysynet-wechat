@@ -1,5 +1,5 @@
 /**
- * @file 设备--验收
+ * @file 设备--维修记录
  */
 import React, {PureComponent} from 'react';
 import {Toast} from 'antd-mobile';
@@ -18,7 +18,6 @@ class MyCheckList extends PureComponent {
             url: assets.selectRrpairList,
             userId:'',
             sessionId: '',
-            orderFstate:'',
             userType: ''
         }
     }
@@ -27,12 +26,13 @@ class MyCheckList extends PureComponent {
         const { userId } = userInfo;
         const userType = this.props.userReducer.userInfo.groupName === undefined? null: this.props.userReducer.userInfo.groupName;
         const { sessionId } = this.props.sessionReducer.session;
-        const orderFstate = this.props.checkReducer.BaseInfoInfoData.orderFstate === undefined?'50': this.props.checkReducer.BaseInfoInfoData.orderFstate
-        this.setState({userId, userType, sessionId, orderFstate });
+        //alert(orderFstate,'orderFstate');
+        this.setState({userId, userType, sessionId });
     }
     async onClick(record) {
         const { history } = this.props;
-        const { orderFstate, userId, userType,sessionId} = this.state;
+        const { userId, userType,sessionId } = this.state;
+        console.log( userId, userType,sessionId );
         const data = await queryDetail({
             body: {
                 rrpairOrderGuid: record.rrpairOrderGuid
@@ -41,10 +41,10 @@ class MyCheckList extends PureComponent {
         });
         if (data.status) {
             Toast.loading('加载中....', 1, () => {
-                orderFstate==='10'?
+                record.orderFstate==='10'?
                 history.push({pathname: `/waitForRepair/detail/${userId}/${record.rrpairOrderGuid}/${userType}/${sessionId}`})
                 :
-                history.push({pathname: `/check/detail/${userId}/${orderFstate}/${record.rrpairOrderGuid}/${userType}/${sessionId}`});
+                history.push({pathname: `/check/detail/${userId}/${record.orderFstate}/${record.rrpairOrderGuid}/${userType}/${sessionId}`});
             })
             this
                 .props
@@ -62,17 +62,16 @@ class MyCheckList extends PureComponent {
         }
     }
     render() {
-        const { orderFstate, userType, sessionId } = this.state;
+        const { sessionId } = this.state;
         return (
             <ListViewScroll
                 url={this.state.url}
                 queryParams={{
-                sessionId: sessionId,
-                orderFstate: orderFstate
+                sessionId: sessionId
             }}
                 item={obj => {
                  return (<CardItem
-                    data={{...obj,userType: userType}}
+                    data={{...obj, key: 'repairRecord'}}
                     onClick={this
                     .onClick
                     .bind(this)}

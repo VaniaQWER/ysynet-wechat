@@ -31,10 +31,9 @@ class WaitForRepairDetail extends PureComponent {
   }
 
   async componentWillMount() {
-    console.log(this.props,'props')
-    if(this.props.checkReducer.BaseInfoInfoData.rrpairOrderGuid){
+    if(this.props.userReducer.userInfo.userId){
       const  { rrpairOrderGuid } = this.props.checkReducer.BaseInfoInfoData;
-      const { userType } = this.props.userReducer.userInfo;
+      const userType = this.props.userReducer.userInfo.groupName;
       const { sessionId } = this.props.sessionReducer.session;
       const { userId } = this.props.userReducer.userInfo;
       this.setState({ rrpairOrderGuid, userType, userId, sessionId, baseData: this.props.checkReducer.BaseInfoInfoData });
@@ -202,23 +201,23 @@ class WaitForRepairDetail extends PureComponent {
                                             ? '内修'
                                             : baseData.rrpairType === '01'
                                                 ? '外修'
-                                                : '暂无'}</span>
+                                                : ''}</span>
               </section>
               <section>
                 <span className={styles.tabs_item_label}>指派给：</span>
                 <span className={styles.tabs_item_text}>{baseData.callDeptName}</span>
               </section>
-              <section>
+              {/* <section>
                 <span className={styles.tabs_item_label}>指派人：</span>
                 <span className={styles.tabs_item_text}>张碧晨</span>
-              </section>
+              </section> */}
               <section>
                 <span className={styles.tabs_item_label}>指派时间：</span>
-                <span className={styles.tabs_item_text}>2018-02-04 16：45</span>
+                <span className={styles.tabs_item_text}>{ baseData.callTime }</span>
               </section>
               <section>
                 <span className={styles.tabs_item_label}>维修时间：</span>
-                <span className={styles.tabs_item_text}>2018-02-04 16：45</span>
+                <span className={styles.tabs_item_text}>{ baseData.completTime }</span>
               </section>
               <section>
                 <span className={styles.tabs_item_label}>期望完成：</span>

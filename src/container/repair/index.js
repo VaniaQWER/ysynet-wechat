@@ -34,7 +34,7 @@ class RepairForm extends PureComponent {
       useFstate: '', // 是否在用 - checkbox
       urgentFlag: '', // 紧急度
       spare: '', // 备用
-      failCause: '', // 故障描述 文字
+      faultWords: '', // 故障描述 文字
       faultDescribe: [], // 故障描述
       visible: false, // 选择层 modal
       files: [], // 展示图片
@@ -86,7 +86,7 @@ class RepairForm extends PureComponent {
       spare: this.state.spare,
       rrpairPhone: this.state.rrpairPhone,
       faultDescribe: this.state.faultDescribe,
-      failCause: this.state.failCause,
+      faultWords: this.state.faultWords,
       useFstate: assetsRecord.useFstate,
       tfAccessory: this.state.submitFiles
     }; 
@@ -168,7 +168,7 @@ class RepairForm extends PureComponent {
           })
         }
     }else{
-      Toast.fail('没有访问该页面权限', .5);
+      Toast.fail('您没有报修权限', 1.5);
       this.props.history.push({
         pathname: `/workplace/${userId}/${sessionId}`
       })
@@ -189,7 +189,7 @@ class RepairForm extends PureComponent {
   }
   render() {
     console.log(this.props,'props')
-    const { useFstate, urgentFlag, spare, faultDescribeText, assetsRecord, rrpairPhone, failCause,
+    const { useFstate, urgentFlag, spare, faultDescribeText, assetsRecord, rrpairPhone, faultWords,
       faultDescribe, visible, files, imageVisible, imgSrc, rrpairSend } = this.state;
     const { getFieldProps } = this.props.form;
     return (
@@ -295,12 +295,12 @@ class RepairForm extends PureComponent {
         >  
         
           <TextareaItem
-            {...getFieldProps('failCause', {
-              initialValue: failCause
+            {...getFieldProps('faultWords', {
+              initialValue: faultWords
             })}  
             title={'故障描述'}
             placeholder='请输入故障描述'
-            onChange={v => this.setState({failCause: v })}
+            onChange={v => this.setState({faultWords: v })}
             autoHeight
             labelNumber={5}
           />  
@@ -308,7 +308,6 @@ class RepairForm extends PureComponent {
         <WhiteSpace size="sm"/>
         <Item
         >  
-          
           <img style={{marginRight: 12}} src={require('../../assets/image_orange.svg')} alt=''/>  <span>故障图片(至多3张)</span>
           <ImagePicker
             files={files}

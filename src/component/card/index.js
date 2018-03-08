@@ -10,12 +10,7 @@ const Item = List.Item;
 const Brief = Item.Brief;
 
 class CardItem extends PureComponent {
-    constructor(props) {
-        super(props)
-        this.state = {
-            checkList: {}
-        }
-    }
+    
     showText = (res) => {
         let str = '';
         if (res) {
@@ -35,6 +30,26 @@ class CardItem extends PureComponent {
         }
         return str.substring(0, str.length - 1);
     }
+    //10申请，20指派，30维修中,50待验收，80已拒绝 90已关闭 
+    btnText = (val)=>{
+        switch (val){
+            case '10' :
+                return '已申请'
+            case '20' :
+                return '指派中'
+            case '30' :
+                return '维修中'
+            case '50' :
+                return '待验收'
+            case '80' :
+                return '已拒绝'
+            case '90' :
+                return '已关闭'
+            default :
+                return null
+        }
+    }
+    
     render() {
         const check_btn = (orderFstate)=>{
             return (
@@ -45,7 +60,8 @@ class CardItem extends PureComponent {
                 }}>
                     <Button
                         style={{
-                        marginTop: 3
+                        marginTop: 3,
+                        marginBottom: 3
                     }}
                         type="ghost"
                         size="small"
@@ -58,8 +74,34 @@ class CardItem extends PureComponent {
                 </div>
             )
         }
+        const BtnItem = (key,orderFstate,userType)=>{
+            if(key === 'repairRecord'){
+                return <div
+                            style={{
+                            textAlign: 'right',
+                            marginRight: 15
+                        }}>
+                            <Button
+                                style={{
+                                marginTop: 3,
+                                marginBottom: 3
+                            }}
+                                type="ghost"
+                                size="small"
+                                inline
+                                onClick={() => this.props.onClick(item)}>{this.btnText(orderFstate)}</Button>
+                        </div>
+                }else if(userType === 'syks'&& orderFstate ==='50'){
+                    return check_btn(orderFstate)
+                }else if(userType !== 'syks'&& orderFstate !=='50'){
+                    return check_btn(orderFstate)
+                }
+        }
         const item = this.props.data;
-        const {orderFstate, userType} = item;
+        const { orderFstate, userType, key } = item;
+        /* 
+            key: 维修管理页面独有  repairRecord
+        */
         return (
             <List>
                 <Item className={styles['equ-title']}>
@@ -81,9 +123,9 @@ class CardItem extends PureComponent {
                                 : '一般'}</a>
                 </span>
                 {
-                    item.faultDescribe !== null && <Brief>
+                    item.faultDescribe !== null && <div className={styles['faultDesc-brief']}>
                         {this.showText(item.faultDescribe)}
-                    </Brief>
+                    </div>
                 }
                 {
                     item.createDate && <Brief>
@@ -99,14 +141,9 @@ class CardItem extends PureComponent {
                                 : '')}
                     </Brief>
                 } </Item>}
-                {(userType === 'syks'&& orderFstate ==='50')?
-                    check_btn(orderFstate)
-                    :
-                    (userType !== 'syks'&& orderFstate !=='50')?
-                    check_btn(orderFstate)
-                    :
-                    null
-            }
+                {
+                    BtnItem(key,orderFstate,userType)
+                }
             </List>
         )
     }

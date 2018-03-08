@@ -3,7 +3,7 @@
  */
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
-import { ListView } from 'antd-mobile';
+import { ListView, PullToRefresh } from 'antd-mobile';
 import promiseRequest from '../../utils/promise_request'
 
 const NUM_ROWS = 10;
@@ -22,7 +22,7 @@ class ListViewScroll extends PureComponent {
       isLoading: true,
       height: document.documentElement.clientHeight
     };
-    //this.onRefresh = this.onRefresh.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
     this.onEndReached = this.onEndReached.bind(this);
   }
   async genData (pIndex = 0) {
@@ -39,7 +39,7 @@ class ListViewScroll extends PureComponent {
     for (let i = 0; i < data.length ; i++) {
       dataArr.push(`row - ${(pIndex * NUM_ROWS) + i}`);
     }
-    this.setState({ data });
+    this.setState({ data: [ ...this.state.data, ...data] });
     return dataArr;
   }
   componentDidUpdate() {
@@ -56,7 +56,7 @@ class ListViewScroll extends PureComponent {
     })
   }
 
-  /* async onRefresh () {
+  async onRefresh () {
     this.setState({ refreshing: true, isLoading: true });
     this.rData = await this.genData();
     this.setState({
@@ -64,7 +64,7 @@ class ListViewScroll extends PureComponent {
       refreshing: false,
       isLoading: false,
     })
-  }; */
+  };
   
   async onEndReached (event) {
     if (this.state.isLoading && !this.state.hasMore) {
@@ -86,7 +86,7 @@ class ListViewScroll extends PureComponent {
     const row = (rowData, sectionID, rowID) => {
       if (index < 0) {
         index = data.length - 1;
-      }
+      } 
       const obj = data[index--];
       return (
         <this.props.item {...obj}/>
@@ -117,15 +117,16 @@ class ListViewScroll extends PureComponent {
           height: this.state.height,
           border: '1px solid #ddd',
           margin: '5px 0',
-          overflow: 'auto',
+          overflowX: 'hidden'
         }}
-        useBodyScroll
         renderSeparator={separator}
-        /* pullToRefresh={<PullToRefresh
+        pullToRefresh={<PullToRefresh
           refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
-        />} */
+        />}
+        scrollRenderAheadDistance={500}
         onEndReached={this.onEndReached}
+        onEndReachedThreshold={10}
         pageSize={4}
       />
     );

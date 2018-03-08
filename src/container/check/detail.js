@@ -61,12 +61,12 @@ class CheckDetail extends PureComponent {
             if (data.status) {
                 this.setState({
                     BaseInfoInfoData: {
+                        ...data.result.selectRrpairDetail,
                         ...data.result.selectRrpairDetailIsAcce,
                         ...data.result.selectRrpairDetailIsAssets,
                         ...data.result.selectRrpairDetailIsCall,
                         ...data.result.selectRrpairDetailIsOrder,
                         ...data.result.selectRrpairDetailIsRrpair,
-                        ...this.props.location.state
                     }
                 })
             }
@@ -81,7 +81,7 @@ class CheckDetail extends PureComponent {
     }
     //验收通过
     handOk = () => {
-        alert('验收', '是否确认收货？', [
+        alert('验收', '是否验收维修单？', [
             {
                 text: '取消',
                 onPress: () => console.log('取消'),
@@ -196,7 +196,7 @@ class CheckDetail extends PureComponent {
         const {history} = this.props;
         const {visible, notCause, orderFstate, rrpairOrderGuid ,userType } = this.state;
         const baseData = this.state.BaseInfoInfoData;
-        console.log(orderFstate, rrpairOrderGuid ,userType)
+        console.log(baseData,'baseData')
         const syks_btn = ()=>{
             return (
             <div className={styles.list_bottom}>
@@ -207,6 +207,7 @@ class CheckDetail extends PureComponent {
                         inline
                         style={{
                         fontSize:14,
+                        borderTop: '1px solid #ffa000',
                         borderRadius: 0,
                         width: '50%'
                     }}
@@ -239,14 +240,10 @@ class CheckDetail extends PureComponent {
         return (
             <div className={styles.ysychat_content}>
                 <List>
-                    <Item
-                        multipleLine
-                        extra={< span className = {
-                        styles['fstate-span']
-                    } > {this.showFstate(orderFstate)} </span>}>
-                        <span className={styles['span-bold']}>维修单号:
-                        </span>
+                    <Item multipleLine>
+                        <span className={styles['span-bold']}>维修单号:</span>
                         <span className={styles['rep-No-span']}>{baseData.rrpairOrderNo}</span>
+                        <span className = { styles['fstate-span']}>{this.showFstate(orderFstate)} </span>
                     </Item>
                     <WhiteSpace/>
                     <Item
@@ -396,11 +393,7 @@ class CheckDetail extends PureComponent {
                                 </p>
                                 <p className={styles['mb_12']}>
                                     <span className={styles['explain-span']}>送修:</span>
-                                    <span>{selectOption
-                                            .rrpairSend
-                                            .map((item, ind) => item.value === baseData.rrpairSend
-                                                ? item.text
-                                                : '')}</span>
+                                    <span>{baseData.rrpairSend === '01'? '否': '是'}</span>
                                 </p>
                                 <p className={styles['mb_12']}>
                                     <span className={styles['explain-span']}>故障描述:</span>
