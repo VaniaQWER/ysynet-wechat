@@ -170,12 +170,10 @@ class CheckDetail extends PureComponent {
    
     getColor = val => {
         switch (val) {
-            case '维修':
+            case '02':
                 return '#fadb14';
-            case '闲置':
+            case '01':
                 return '#389e0d';
-            case '00':
-                return '#08979c';
             default:
                 return '#096dd9';
         }
@@ -261,11 +259,11 @@ class CheckDetail extends PureComponent {
                             <span
                                 className={styles.repair_tag_wrapper}
                                 style={{
-                                background: baseData.guaranteeFlag === '出保'
-                                    ? '#ff4d4f'
-                                    : '#389e0d'
+                                background: baseData.guaranteeFlag === '02'
+                                    ? '#ff4d4f':baseData.guaranteeFlag === '01'?'#389e0d'
+                                    : '#BEBEBE'
                             }}>
-                                {baseData.guaranteeFlag}
+                                {baseData.guaranteeFlag==='01'?'在保':baseData.guaranteeFlag==='02'?'出保':''}
                             </span>
                         }
                         <span
@@ -273,9 +271,10 @@ class CheckDetail extends PureComponent {
                             style={{
                             background: this.getColor(baseData.useFstate)
                         }}>
-                            {baseData.useFstate === '00'
-                                ? '停用'
-                                : '在用'}
+                            {baseData.useFstate === '02'
+                                ? '停用':baseData.useFstate === '01'?
+                                '在用':
+                                ''}
                         </span>
                         <Brief>
                             <span>型号:{baseData.spec}</span>
@@ -439,7 +438,8 @@ class CheckDetail extends PureComponent {
                     syks_btn()
                     :
                     (userType !== 'syks'&& orderFstate === '30')?
-                    repair_btn()
+                    //repair_btn()
+                    null
                     :
                     null
                 }

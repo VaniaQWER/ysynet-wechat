@@ -25,7 +25,7 @@ class LoginForm extends Component{
             this.setState({ loading: true });
             setTimeout(()=>{
                 this.setState({ loading: false });
-                Toast.success('登陆成功',1.5,()=>history.push({ pathname:`/workplace/${userId}/${sessionId}` }))
+                Toast.fail('您当前没有权限，不能成为我们的用户')
                 },
              1000);
             } 

@@ -48,7 +48,7 @@ export const selectOption = {
     { text: "其他", value: "02" }
   ],
   useFstate: [ //是否停用
-    { text: "是", value: "00" },
+    { text: "是", value: "02" },
     { text: "否", value: "01" },
   ],
   offCause: [ //关闭原因

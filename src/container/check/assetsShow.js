@@ -61,8 +61,9 @@ class AssetsShow extends PureComponent {
                     <Item thumb={require('../../assets/protect.svg')}>
                         <span className={styles['table-span']}>是否在保</span>
                         {baseData.guaranteeFlag === '01'
-                                ? '在保'
-                                : '出保'}
+                                ? '在保':baseData.guaranteeFlag === '02'?
+                                '出保':
+                                ''}
                     </Item>
                 </List>
         )

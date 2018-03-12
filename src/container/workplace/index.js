@@ -131,7 +131,7 @@ class Workplace extends PureComponent {
   }
   async getUserInfo(userId,sessionId){
     const { history, setUser, setMenu, setSessionId }= this.props;
-    const data = await fetchUser({ body:{ userId: userId },type:'formData'});
+    const data = await fetchUser({ body:{ userId: userId,sessionId: sessionId },type:'formData'});
         if(data.status && data.result){
           let userType = null;
           setUser({userInfo: data.result});
@@ -141,7 +141,7 @@ class Workplace extends PureComponent {
         }else{
           Toast.fail('用户信息异常', 1 ,() => history.push({ pathname:`/error` }));
         }
-        const menu = await fetchMenu({ body:{ userId: userId },type:'formData'});
+        const menu = await fetchMenu({ body:{ userId: userId, sessionId: sessionId },type:'formData'});
         if(menu.status && menu.result){
           let menuRes = menu.result,menuList = [];
           menuRes.map((item,index)=>{
