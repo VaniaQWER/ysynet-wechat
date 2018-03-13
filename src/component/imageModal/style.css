@@ -1,0 +1,32 @@
+/* 模态框 图片文字说明 */
+.ysy_modal_content{
+    position: relative;
+    width :100%;
+    text-align: left;
+}
+.tabs_body {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    min-height: 70px;
+    background: #fff;
+    position: relative;
+  }
+  .tabs_body section {
+    width: 100%;
+    padding: 4px;
+    overflow: hidden;
+    background: #fff;
+  }
+  
+  .tabs_body .tabs_item_label {
+    float: left;
+    width: 30%;
+  }
+  
+  .tabs_body .tabs_item_text {
+    font-weight: bold;
+    width:70%;
+    margin-left: 30%;
+    color: rgba(0, 0, 0, .65);
+  }

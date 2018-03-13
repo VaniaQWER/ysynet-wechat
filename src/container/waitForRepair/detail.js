@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
-import { List, WhiteSpace, Result, Tabs, Button, Modal, Toast } from 'antd-mobile';
+import { List, WhiteSpace, Result, Tabs, Button, Modal, Toast, ImagePicker } from 'antd-mobile';
 import {selectOption, faultDescribeData} from '../../constants'
 import {queryDetail} from '../../api/check';
 import {operation, user as userService, menu as menuService,session as sessionService} from '../../service'
 import { updateRrpairOrderFstate,pushMessage } from '../../api/assets'
+import ImageModal  from '../../component/imageModal'
+import { FTP } from '../../api/_local'
 import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux';
 import styles from './style.css';
@@ -23,7 +25,11 @@ class WaitForRepairDetail extends PureComponent {
     super(props)
     this.state = {
       baseData: {},
+      files: [], //图片
+      src: '',
+      visible: false,
       rrpairOrderGuid: '',
+      multiple: false,
       userId: '',
       sessionId: '',
       userType: ''
@@ -52,7 +58,22 @@ class WaitForRepairDetail extends PureComponent {
           type: 'formData'
         });
         if (data.status) {
+          let { faultAccessory } = data.result.selectRrpairDetailIsOrder;
+          if(typeof faultAccessory === 'string'){
+            let urls = faultAccessory.split(';');
+            let u = urls.splice(0, urls.length-1);
+            let files = [];
+            u.map((item,index)=>{
+                return files.push({
+                    url: FTP+item,
+                    id: index
+                })
+            });
+            console.log(files,'file')
+            this.setState({ files: files });
+          }
           this.setState({baseData:{
+                ...data.result.selectRrpairDetail,
                 ...data.result.selectRrpairDetailIsAcce,
                 ...data.result.selectRrpairDetailIsAssets,
                 ...data.result.selectRrpairDetailIsCall,
@@ -63,6 +84,7 @@ class WaitForRepairDetail extends PureComponent {
                 .props
                 .setCheckDetial({
                     BaseInfoInfoData: {
+                        ...data.result.selectRrpairDetail,
                         ...data.result.selectRrpairDetailIsAcce,
                         ...data.result.selectRrpairDetailIsAssets,
                         ...data.result.selectRrpairDetailIsCall,
@@ -119,8 +141,11 @@ class WaitForRepairDetail extends PureComponent {
       Toast.fail(data.msg,1,()=>history.push({ pathname: `/error`}));
     }
   }
+  showModal = (index,fs)=>{
+    this.setState({ visible:true,src:fs[index].url })
+  }
   render() {
-    const { baseData, userType } = this.state;
+    const { baseData, userType, files } = this.state;
     const {history} = this.props;
     return (
       <div>
@@ -191,7 +216,14 @@ class WaitForRepairDetail extends PureComponent {
               </section>
               <section>              
                 <span className={styles.tabs_item_label}>故障图片：</span>
-                
+                <div>
+                  <ImagePicker
+                      files={files}
+                      onImageClick={(index, fs) => this.showModal(index,fs)}
+                      selectable={false}
+                      multiple={this.state.multiple}
+                      />
+                </div>
               </section>
             </div>
             <div className={styles.tabs_body}>
@@ -234,6 +266,18 @@ class WaitForRepairDetail extends PureComponent {
             </div>
           </Tabs>
         </List>
+        <ImageModal 
+            visible={this.state.visible}
+            transparent={true}
+            closable={true}
+            maskClosable={true}
+            onClose={()=>this.setState({visible:false})}
+            data={{
+              src:this.state.src,
+              equipmentName:baseData.equipmentStandardName,
+              faultWords:baseData.faultWords
+          }}
+        />
         {
           userType !=='syks'
           &&

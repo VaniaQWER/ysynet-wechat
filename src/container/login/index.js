@@ -20,8 +20,8 @@ class LoginForm extends Component{
     onSubmit = () => {
         this.props.form.validateFields({ force: true }, (error) => {
           if (!error) {
-            let { userId, sessionId } = this.state;
-            const { history } = this.props;
+            //let { userId, sessionId } = this.state;
+            //const { history } = this.props;
             this.setState({ loading: true });
             setTimeout(()=>{
                 this.setState({ loading: false });

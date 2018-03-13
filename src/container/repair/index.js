@@ -59,7 +59,6 @@ class RepairForm extends PureComponent {
   }
   async submitReg (){
     const { history } = this.props;
-    console.log(history,'history')
     let { userId, sessionId } = this.state;
     console.log(this.getPostData());
     let postData = this.getPostData();
@@ -87,7 +86,7 @@ class RepairForm extends PureComponent {
       rrpairPhone: this.state.rrpairPhone,
       faultDescribe: this.state.faultDescribe,
       faultWords: this.state.faultWords,
-      useFstate: assetsRecord.useFstate,
+      useFstate: this.state.useFstate,
       tfAccessory: this.state.submitFiles
     }; 
     return params;
@@ -152,7 +151,7 @@ class RepairForm extends PureComponent {
   async componentWillMount() {
     let { userId, sessionId, assetsRecordGuid, groupName } = this.props.match.params;
       if( groupName === 'syks'){
-        const { repairReducer } = this.props;
+        const { repairReducer } = this.props; 
         this.setState({ userId, sessionId });
         if (assetsRecordGuid && !repairReducer.assetsRecord.assetsRecordGuid) {
           const data = await queryAssets({body: {assetsRecordGuid: assetsRecordGuid},type:'formData'});
@@ -177,18 +176,15 @@ class RepairForm extends PureComponent {
   }
   getColor = val => {
     switch (val) {
-      case '维修':
+      case '02':
         return '#fadb14';
-      case '闲置':
-        return '#389e0d';
-      case '在用':
+      case '01':
         return '#08979c';
       default:
         return '#096dd9';
     }
   }
   render() {
-    console.log(this.props,'props')
     const { useFstate, urgentFlag, spare, faultDescribeText, assetsRecord, rrpairPhone, faultWords,
       faultDescribe, visible, files, imageVisible, imgSrc, rrpairSend } = this.state;
     const { getFieldProps } = this.props.form;
@@ -198,12 +194,12 @@ class RepairForm extends PureComponent {
           { assetsRecord.equipmentName } 
           <span 
             className={styles.repair_tag_wrapper}
-            style={{background: assetsRecord.guaranteeFlag === '出保' ? '#ff4d4f' : '#389e0d'}}
+            style={{background: assetsRecord.guaranteeFlag === '02' ? '#ff4d4f' : '#389e0d'}}
           >
-            { assetsRecord.guaranteeFlag }
+            { assetsRecord.guaranteeFlag==='02'?'出保':assetsRecord.guaranteeFlag==='01'?'在保': null }
           </span>
           <span className={styles.repair_tag_wrapper} style={{background: this.getColor(assetsRecord.useFstate)}}>
-            { assetsRecord.useFstate === '00'?'停用':'在用' }
+            { assetsRecord.useFstate === '02'?'停用':'在用' }
           </span>
           <Brief>
             <div>规格: { assetsRecord.spec }</div>
