@@ -30,6 +30,17 @@ const menuIcon = {
 const bgData = Array.from(new Array(3)).map((_val, i) => ({
   text: `医商云`,
 }));
+const addMenu = [{
+  text: '资产变更',
+  icon: require('../../assets/assetChange.svg'),
+  path: "/construct",
+  key: "construct"
+},{
+  text: '联系我们',
+  icon: require('../../assets/contactUs.svg'),
+  path: "/construct",
+  key: "construct"
+}];
 const browser={
   versions:function(){
       var u = navigator.userAgent;
@@ -96,12 +107,12 @@ class Workplace extends PureComponent {
         return null
     }
   }
- compare = (property)=>{
-    return (a,b) =>{
-        var value1 = a[property];
-        var value2 = b[property];
-        return value1 - value2;
-    }
+  compare = (property)=>{
+      return (a,b) =>{
+          var value1 = a[property];
+          var value2 = b[property];
+          return value1 - value2;
+      }
   }
   async componentWillMount() {
     const { history } = this.props;
@@ -125,7 +136,7 @@ class Workplace extends PureComponent {
       }
         //获取相关单据数量
         this.getEquipment();
-    }else{
+   }else{
       Toast.fail('请使用微信浏览器登陆',1,()=>history.push({ pathname: `/error` }))
     }
   }
@@ -158,73 +169,75 @@ class Workplace extends PureComponent {
             item.icon = menuIcon[item.key].icon;
             return null;
           });
+          menuList = [...menuList,...addMenu];
+          console.log(menuList,'menuList');
           setMenu(menuList);
           this.setState({ menuList: menuList  })
         }else{
           Toast.fail('用户菜单异常', 1 , () => history.push({ pathname:`/error` }));
         }
-  }
-  async getEquipment () {
-    const { history } = this.props;
-    const res = await selectRrpairFstateNum();
-      if(res.status && res.result){
-        this.setState({ list: res.result });
-      }else{
-        Toast.fail('状态数量异常', 1 ,() => history.push({ pathname:`/error` }));
-      }
-  }
-  goNextStep = (el,index)=>{
-    const { setCheckDetial, history } = this.props;
-    setCheckDetial({BaseInfoInfoData:{ orderFstate: el.code }});
-    history.push({ pathname: `${el.url}`}) 
-  }
-  render() {
-    console.log(this.props,'porps')
-    const { history, userReducer } = this.props;
-    const { menuList, list,userType, sessionId } = this.state; 
-    const { userInfo } = userReducer;
-    return (
-      this.props.children
-      ||
-      <List className={`workplace ${styles.workplace_viewList}`}>
-        <Card className={styles.workplace_header} full>
-          <Card.Header
-            className={styles.workplace_header_body}
-            title={<CardTitle title={userInfo.userName} subTitle={userInfo.orgName}/>}
-            onClick={() => history.push({pathname:'/myinfo'}) }
-            thumb={
-              <img 
-                alt='头像'
-                src={userInfo.headImgUrl}
-                className={styles.workplace_avatar}
-              />
-            }
-            extra={
-              <Icon type="right" size={'sm'} />
-            }
-          />
-          <Card.Body style={{background: '#fff', padding: 0,minHeight:'122px'}}>
-            <Grid 
-              data={ list && list.length > 0 ? this.handMenu(list,userType): bgData}
-              columnNum='3'
-              activeStyle={false} 
-              hasLine={false} 
-              onClick={(el, index) => this.goNextStep(el,index) }
+    }
+    async getEquipment () {
+      const { history } = this.props;
+      const res = await selectRrpairFstateNum();
+        if(res.status && res.result){
+          this.setState({ list: res.result });
+        }else{
+          Toast.fail('状态数量异常', 1 ,() => history.push({ pathname:`/error` }));
+        }
+    }
+    goNextStep = (el,index)=>{
+      const { setCheckDetial, history } = this.props;
+      setCheckDetial({BaseInfoInfoData:{ orderFstate: el.code }});
+      history.push({ pathname: `${el.url}`}) 
+    }
+    render() {
+      console.log(this.props,'porps')
+      const { history, userReducer } = this.props;
+      const { menuList, list,userType, sessionId } = this.state; 
+      const { userInfo } = userReducer;
+      return (
+        this.props.children
+        ||
+        <List className={`workplace ${styles.workplace_viewList}`}>
+          <Card className={styles.workplace_header} full>
+            <Card.Header
+              className={styles.workplace_header_body}
+              title={<CardTitle title={userInfo.userName} subTitle={userInfo.orgName}/>}
+              onClick={() => history.push({pathname:'/myinfo'}) }
+              thumb={
+                <img 
+                  alt='头像'
+                  src={userInfo.headImgUrl}
+                  className={styles.workplace_avatar}
+                />
+              }
+              extra={
+                <Icon type="right" size={'sm'} />
+              }
             />
-          </Card.Body>
-        </Card>
-        <WhiteSpace/>
-        <Grid 
-          data={menuList} 
-          columnNum='2'
-          activeStyle={false} 
-          hasLine={true} 
-          onClick={(el, index) => el.key === "repair"?window.location.href= `${scanUrl}/test/test.html?sessionId=${sessionId}`:el.path?history.push({ pathname:el.path }):console.log(el) }
-        />
-      </List>
-    )
+            <Card.Body style={{background: '#fff', padding: 0,minHeight:'122px'}}>
+              <Grid 
+                data={ list && list.length > 0 ? this.handMenu(list,userType): bgData}
+                columnNum='3'
+                activeStyle={false} 
+                hasLine={false} 
+                onClick={(el, index) => this.goNextStep(el,index) }
+              />
+            </Card.Body>
+          </Card>
+          <WhiteSpace/>
+          <Grid 
+            data={menuList} 
+            columnNum='3'
+            activeStyle={false} 
+            hasLine={true}
+            onClick={(el, index) => el.key === "repair"?window.location.href= `${scanUrl}/test/test.html?sessionId=${sessionId}`:el.path?history.push({ pathname:el.path }):console.log(el) }
+          />
+        </List>
+      )
+    }
   }
-}
 
 export default withRouter(connect(state => state, dispatch => ({
   setUser: user => dispatch(userService.setUserInfo(user)),

@@ -40,15 +40,7 @@ class MyCheckList extends PureComponent {
             type: 'formData'
         });
         if (data.status) {
-            Toast.loading('加载中....', 1, () => {
-                orderFstate==='10'?
-                history.push({pathname: `/waitForRepair/detail/${userId}/${record.rrpairOrderGuid}/${userType}/${sessionId}`})
-                :
-                history.push({pathname: `/check/detail/${userId}/${orderFstate}/${record.rrpairOrderGuid}/${userType}/${sessionId}`});
-            })
-            this
-                .props
-                .setCheckDetial({
+            this.props.setCheckDetial({
                     BaseInfoInfoData: {
                         ...data.result.selectRrpairDetail,
                         ...data.result.selectRrpairDetailIsAcce,
@@ -59,6 +51,13 @@ class MyCheckList extends PureComponent {
                         ...record
                     }
                 });
+            Toast.loading('加载中....', 1, () => {
+                orderFstate==='10'?
+                history.push({pathname: `/waitForRepair/detail/${userId}/${record.rrpairOrderGuid}/${userType}/${sessionId}`})
+                :
+                history.push({pathname: `/check/detail/${userId}/${orderFstate}/${record.rrpairOrderGuid}/${userType}/${sessionId}`});
+            })
+            
         }
     }
     render() {

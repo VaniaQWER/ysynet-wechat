@@ -42,7 +42,7 @@ class RepairForm extends PureComponent {
       imageVisible: false, // 图片 modal
       faultDescribeText: '', // 故障描述  - text
       rrpairPhone: '', // 维修电话
-      rrpairSend: false, //是否送修
+      rrpairSend: '01', //是否送修  01 否  00 是
       loading: false,
       sessionId: '',
       userId:''
@@ -341,10 +341,10 @@ class RepairForm extends PureComponent {
           thumb={require('../../assets/rrpairSend_orange.svg')}
           extra={<Switch
           {...getFieldProps('rrpairSend', {
-            initialValue: rrpairSend,
+            initialValue: false,
             valuePropName: 'checked',
           })}
-          onClick={(checked) => this.setState({ rrpairSend: checked? '01':'00' }) }
+          onClick={(checked) => this.setState({ rrpairSend: checked? '00':'01' }) }
           platform="ios"
           />}>  
           是否送修
