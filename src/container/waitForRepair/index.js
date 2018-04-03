@@ -108,7 +108,6 @@ class WaitForRepair extends PureComponent {
   }
 }
 
-// export default WaitForRepair;
 export default withRouter(connect(state => state, dispatch => ({
   setCheckDetial: check => dispatch(operation.setCheckDetial(check))
 }))(WaitForRepair));

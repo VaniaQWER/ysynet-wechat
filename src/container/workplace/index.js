@@ -6,7 +6,7 @@ import { List, Card, Icon, Grid, WhiteSpace,Toast } from 'antd-mobile';
 import { withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 import { user as userService, menu as menuService, operation as operSerVice, session as sessionService  } from '../../service';
-import { fetchUser,fetchMenu,getSession } from '../../api/user';
+import { fetchUser,fetchMenu } from '../../api/user';
 import { selectRrpairFstateNum } from '../../api/assets';
 import { scanUrl }  from '../../api/_local';
 import styles from './style.css';
@@ -122,10 +122,6 @@ class Workplace extends PureComponent {
         let userId = params.userId;
         let sessionId = params.sessionId;
         this.getUserInfo(userId,sessionId);
-        const session = await getSession();
-        if(session.status){
-          console.log('session 请求')
-        }
       }else{
         this.setState({ 
           userInfo: this.props.userReducer.userInfo,
@@ -142,8 +138,8 @@ class Workplace extends PureComponent {
   }
   async getUserInfo(userId,sessionId){
     const { history, setUser, setMenu, setSessionId }= this.props;
-    const data = await fetchUser({ body:{ userId: userId,sessionId: sessionId },type:'formData'});
-        if(data.status && data.result){
+    const data = await fetchUser({ body:{ userId: userId },type:'formData'});
+        if(data.status){
           let userType = null;
           setUser({userInfo: data.result});
           setSessionId({ sessionId: sessionId });
@@ -152,8 +148,8 @@ class Workplace extends PureComponent {
         }else{
           Toast.fail('用户信息异常', 1 ,() => history.push({ pathname:`/error` }));
         }
-        const menu = await fetchMenu({ body:{ userId: userId, sessionId: sessionId },type:'formData'});
-        if(menu.status && menu.result){
+        const menu = await fetchMenu({ body:{ userId: userId },type:'formData'});
+        if(menu.status){
           let menuRes = menu.result,menuList = [];
           menuRes.map((item,index)=>{
             if(item.key === null && item.path === null){

@@ -60,7 +60,7 @@ class PartInfo extends PureComponent {
                     <Item
                         extra={< span style = {{color:'green',fontSize: 18}} > {
                         `x${item.acceNum}`
-                    } < /span>}>
+                    } </span>}>
                         <p>{item.acceName}</p>
                         {(item.acceFmodel && item.acceSpec) && <Brief>
                             <span

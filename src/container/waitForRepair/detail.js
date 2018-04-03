@@ -154,7 +154,7 @@ class WaitForRepairDetail extends PureComponent {
     let parmas = {};
     parmas.rrpairOrderGuid = baseData.rrpairOrderGuid;
     parmas.orderFstate = '30';
-    parmas.sessionId = this.state.sessionId;
+    /* parmas.sessionId = this.state.sessionId; */
     const data = await updateRrpairOrderFstate({body: parmas, type: 'formData'});
     if (data.status) {
       Toast.success('接修成功', 1, () => {

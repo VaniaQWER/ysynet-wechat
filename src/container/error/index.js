@@ -12,7 +12,7 @@ class Error extends PureComponent{
     }
     componentWillMount = ()=>{
         if(window.location.hash.indexOf('=')>0){
-            let msg = window.location.hash.split('=')[1];
+            let msg = decodeURI(window.location.hash.split('=')[1]);
             this.setState({ msg })
         }
     }

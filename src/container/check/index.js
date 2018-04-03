@@ -66,7 +66,7 @@ class MyCheckList extends PureComponent {
             <ListViewScroll
                 url={this.state.url}
                 queryParams={{
-                sessionId: sessionId,
+                /* sessionId: sessionId, */
                 orderFstate: orderFstate
             }}
                 item={obj => {

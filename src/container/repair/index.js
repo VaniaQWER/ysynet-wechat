@@ -60,9 +60,8 @@ class RepairForm extends PureComponent {
   async submitReg (){
     const { history } = this.props;
     let { userId, sessionId } = this.state;
-    console.log(this.getPostData());
     let postData = this.getPostData();
-    postData.sessionId = this.state.sessionId;
+    /* postData.sessionId = this.state.sessionId; */
     this.setState({ loading: true });
     const data = await insertNewAssets({body: postData,type: 0 });
     this.setState({ loading: false });

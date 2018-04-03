@@ -10,7 +10,6 @@ const Item = List.Item;
 class AssetsShow extends PureComponent {
     componentWillMount = () => {
         const {BaseInfoInfoData} = this.props.checkReducer;
-        console.log(BaseInfoInfoData,'11')
         if (!BaseInfoInfoData) {
           Toast.fail('没有访问该页面权限', 1);
           this
