@@ -5,6 +5,8 @@ import userReducer from './user';
 import menuReducer from './menu';
 import checkParmasReducer from './checkParmas';
 import partsReducer from './parts';
+import borrowReducer  from './borrow';
+import deptReducer from './dept'
 import sessionReducer from './session';
 const reducer = combineReducers({
   repairReducer,
@@ -13,7 +15,9 @@ const reducer = combineReducers({
   menuReducer,
   checkParmasReducer,
   partsReducer,
-  sessionReducer
+  sessionReducer,
+  borrowReducer,
+  deptReducer
 })
 
 export default reducer;

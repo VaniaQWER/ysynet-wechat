@@ -3,6 +3,9 @@ import {_local} from './_local';
 /* const user = {
   fetchUser: `${_local}/login/getUserInfo`
 } */
+export default {
+  loginBind: `${_local}/login/weBind`,//登陆页面登陆绑定
+}
 export async function fetchUser(options) {
   return promiseRequest(`${_local}/login/getWeiXinUserInfo`,options)
 }
@@ -14,4 +17,8 @@ export async function updateUserName(options) {
 }
 export async function getSession(options) {
   return promiseRequest(`${_local}/test/getSession`,options)
+}
+
+export async function loginBind(options) {
+  return promiseRequest(`${_local}/login/weBind`,options)
 }

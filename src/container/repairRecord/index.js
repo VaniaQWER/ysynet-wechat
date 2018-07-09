@@ -61,7 +61,7 @@ class MyCheckList extends PureComponent {
         }
     }
     render() {
-        const { sessionId } = this.state;
+        // const { sessionId } = this.state;
         return (
             <ListViewScroll
                 url={this.state.url}

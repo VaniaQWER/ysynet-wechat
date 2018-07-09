@@ -1,38 +1,42 @@
 /**
  * @file 设备--微信-登陆
  */
-import React, { Component } from 'react';
-import { InputItem, Button,List,WingBlank,WhiteSpace,Toast } from 'antd-mobile';
+import React, {PureComponent} from 'react';
+import { InputItem, Button, List, WingBlank, WhiteSpace, Toast } from 'antd-mobile';
 import styles from './style.css';
+import { loginBind } from '../../api/user';
 import { createForm } from 'rc-form';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 const Item = List.Item;
-class LoginForm extends Component{
-    constructor(props) {
-        super(props)
-        this.state = {
-            loading: false,
-            userId: '',
-            sessionId: ''
-        }
-    }
-    onSubmit = () => {
-        this.props.form.validateFields({ force: true }, (error) => {
-          if (!error) {
-            this.setState({ loading: true });
-            setTimeout(()=>{
-                this.setState({ loading: false });
-                Toast.fail('您当前没有权限，不能成为我们的用户')
-                },
-             1000);
-            } 
-        });
+class LoginForm extends PureComponent{
+    state = {
+        loading: false,
+        openId: null
     }
     async componentWillMount(){
         const { params } = this.props.match;
-        let { userId,sessionId } = params;
-        this.setState({ userId, sessionId });
+        let { openId } = params;
+        this.setState({ openId });
+    }
+    async onClick () {
+        const { history } = this.props;
+        this.props.form.validateFields({ force: true }, async (error) => {
+          if (!error) {
+            this.setState({ loading: true });
+            const values = this.props.form.getFieldsValue();
+            values.openid =  this.state.openId;
+            console.log(values,'values')
+            const data = await loginBind({body: values, type: 'formData'});
+            this.setState({ loading: false });
+            let { userId } = data.result;
+            if(data.status){
+                Toast.success('登陆成功',2,()=>history.push({ pathname: `/workplace/${userId}` }));
+            }else{
+                Toast.fail('登陆失败',2,()=>history.push({ pathname: `/error` }))
+            }
+            } 
+        });
     }
     render(){
         const { getFieldProps, getFieldError } = this.props.form;
@@ -43,15 +47,15 @@ class LoginForm extends Component{
                         <form>
                             <div className={styles.userRegHeader}>用户登陆</div>
                                 <Item thumb={require('../../assets/username.png')} className={styles.loginItem}>
-                                    <InputItem {...getFieldProps('account', {
+                                    <InputItem {...getFieldProps('name', {
                                             rules: [
                                             { required: true, message: '请输入工号' },
                                             ],
                                         })}
                                         clear
-                                        error={!!getFieldError('account')}
+                                        error={!!getFieldError('name')}
                                         onErrorClick={() => {
-                                            alert(getFieldError('account').join('、'));
+                                            alert(getFieldError('name').join('、'));
                                         }}
                                         placeholder="请输入工号"
                                         >
@@ -59,26 +63,26 @@ class LoginForm extends Component{
                                 </Item>
                                 <WhiteSpace size='lg'/>
                                 <Item thumb={require('../../assets/password.png')} className={styles.loginItem} >
-                                    <InputItem {...getFieldProps('password', {
+                                    <InputItem {...getFieldProps('pwd', {
                                             rules: [
                                             { required: true, message: '请输入密码' },
                                             ],
                                         })}
                                         type={'password'}
                                         clear
-                                        error={!!getFieldError('password')}
+                                        error={!!getFieldError('pwd')}
                                         onErrorClick={() => {
-                                            alert(getFieldError('password').join('、'));
+                                            alert(getFieldError('pwd').join('、'));
                                         }}
                                         placeholder="请输入密码"
                                         >
                                     </InputItem>
                                 </Item>
                         </form>
-                        <div className={styles.userRegfooter}>{(getFieldError('account') && getFieldError('account').join(','))||(getFieldError('password') && getFieldError('password').join(','))}</div>
+                        <div className={styles.userRegfooter}>{(getFieldError('name') && getFieldError('name').join(','))||(getFieldError('pwd') && getFieldError('pwd').join(','))}</div>
                         <Button type='primary' size='large' 
                             className={styles['reg_btn']} 
-                            onClick={this.onSubmit} 
+                            onClick={()=>this.onClick()} 
                             loading={this.state.loading}>
                             登陆系统
                         </Button>

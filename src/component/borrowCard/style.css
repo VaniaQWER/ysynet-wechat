@@ -1,0 +1,17 @@
+.borrow-card div span:first-child{
+  margin-right: 8px;
+}
+.borrowed{
+  padding: 3px 6px;
+  background: #fadb14;
+  color: #fff;
+}
+.borrowRevert{
+  padding: 3px 6px;
+  background: #69de41;
+  color: #fff;
+}
+.plusIcon{
+  display: flex;
+  justify-content: flex-end;
+}

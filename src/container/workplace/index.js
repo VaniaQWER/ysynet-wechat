@@ -21,6 +21,9 @@ const menuIcon = {
   "construct":{
     icon: require('../../assets/assets.svg')
   },
+  "borrowRecord":{
+    icon: require('../../assets/borrow.svg')
+  },
   "check":{
     icon: require('../../assets/checkin.svg')
   }
@@ -30,17 +33,19 @@ const menuIcon = {
 const bgData = Array.from(new Array(3)).map((_val, i) => ({
   text: `医商云`,
 }));
-const addMenu = [{
+const addMenu = [
+  /* {
   text: '资产变更',
   icon: require('../../assets/assetChange.svg'),
-  path: "/construct",
-  key: "construct"
-},{
-  text: '联系我们',
-  icon: require('../../assets/contactUs.svg'),
-  path: "/construct",
-  key: "construct"
-}];
+  path: "/borrowRecord",
+  key: "borrowRecord"
+  }, */
+  {
+    text: '联系我们',
+    icon: require('../../assets/contactUs.svg'),
+    path: "/construct",
+    key: "construct"
+  }];
 const browser={
   versions:function(){
       var u = navigator.userAgent;
@@ -122,6 +127,7 @@ class Workplace extends PureComponent {
         let userId = params.userId;
         let sessionId = params.sessionId;
         this.getUserInfo(userId,sessionId);
+        // this.getUserInfo(userId);
       }else{
         this.setState({ 
           userInfo: this.props.userReducer.userInfo,
@@ -139,12 +145,15 @@ class Workplace extends PureComponent {
   async getUserInfo(userId,sessionId){
     const { history, setUser, setMenu, setSessionId }= this.props;
     const data = await fetchUser({ body:{ userId: userId },type:'formData'});
+    // const data = await fetchUser({ body:{ userId: 'E2EDF6E336AC4EE28F87FF53F4F6BBD7' },type:'formData'});
         if(data.status){
           let userType = null;
           setUser({userInfo: data.result});
           setSessionId({ sessionId: sessionId });
           userType = data.result.groupName;
           this.setState({ userInfo: data.result,userType: userType, sessionId: sessionId})
+          // this.setState({ userInfo: data.result,userType: userType, })
+
         }else{
           Toast.fail('用户信息异常', 1 ,() => history.push({ pathname:`/error` }));
         }
@@ -228,7 +237,8 @@ class Workplace extends PureComponent {
             columnNum='3'
             activeStyle={false} 
             hasLine={true}
-            onClick={(el, index) => el.key === "repair"?window.location.href= `${scanUrl}/test/test.html?sessionId=${sessionId}`:el.path?history.push({ pathname:el.path }):console.log(el) }
+            // onClick={(el, index) => el.key === "repair"?window.location.href= `${scanUrl}/test/test.html?sessionId=${sessionId}`:el.path?history.push({ pathname:el.path }):console.log(el) }
+            onClick={(el, index) => el.key === "repair"?window.location.href= `${scanUrl}/test/test.html`:el.path?history.push({ pathname:el.path }):console.log(el) }
           />
         </List>
       )

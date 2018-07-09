@@ -1,0 +1,20 @@
+
+.hidden-button div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  border-radius: 50%;
+  margin-bottom: 16px;
+}
+.plusButton{
+  display: flex;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px #111111;
+}

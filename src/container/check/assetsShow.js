@@ -10,7 +10,8 @@ const Item = List.Item;
 class AssetsShow extends PureComponent {
     componentWillMount = () => {
         const {BaseInfoInfoData} = this.props.checkReducer;
-        if (!BaseInfoInfoData) {
+        const { baseDetail } = this.props.borrowReducer;
+        if (!BaseInfoInfoData || !baseDetail) {
           Toast.fail('没有访问该页面权限', 1);
           this
             .props
@@ -19,7 +20,8 @@ class AssetsShow extends PureComponent {
         }
       }
     render() {
-        const baseData = this.props.checkReducer.BaseInfoInfoData;
+        const { checkReducer, borrowReducer } = this.props;
+        const baseData = checkReducer.BaseInfoInfoData.assetsRecordGuid ? checkReducer.BaseInfoInfoData: borrowReducer.baseDetail
         return (
                 <List className={styles['table-row']} renderHeader={() => '基本资料'}>
                     <Item thumb={require('../../assets/code.svg')}>

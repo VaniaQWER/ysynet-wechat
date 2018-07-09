@@ -9,16 +9,17 @@ import WaitForRepair from './waitForRepair';
 import Check from './check';
 import StartToRepair from './startToRepair';
 import RepairRecord from './repairRecord';
+import Borrow from './borrow';
 const routes = [
-  { path: '/login/:userId/:sessionId', component: asyncComponent(() =>import ('../container/login'),'登陆')},
+  { path: '/login/:openId', component: asyncComponent(() =>import ('../container/login'),'登陆')},
   { path: '/register', exact: true, component: () =>(<div> register </div>)},
   /* { path: '/register', exact: true, component: asyncComponent(() => import("../container/register"), 'register')}, */
   { path: '/error', exact: true, component: asyncComponent(() => import("../container/error"), '错误')},
   { path: '/construct', exact: true,component: asyncComponent(() => import("../container/workplace/construct"),'正在建设中')}, 
-  { path: '/workplace/:userId/:sessionId', component: asyncComponent(() => import("../container/workplace"), '我的工作台') },
+  { path: '/workplace/:userId', component: asyncComponent(() => import("../container/workplace"), '我的工作台') },
   { path: '/myinfo', exact: true,component: asyncComponent(() => import("../container/workplace/myInfo"),'我的')}, 
   { path: '/modifyUserName', exact: true,component: asyncComponent(() => import("../container/workplace/modifyUserName"),'修改我的用户名')}, 
-  ...Repair, ...WaitForRepair, ...Check, ...StartToRepair, ...RepairRecord
+  ...Repair, ...WaitForRepair, ...Check, ...StartToRepair, ...RepairRecord, ...Borrow
 ]
 
 

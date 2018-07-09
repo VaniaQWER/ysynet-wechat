@@ -61,14 +61,13 @@ class MyCheckList extends PureComponent {
         }
     }
     render() {
-        const { orderFstate, userType, sessionId } = this.state;
+        const { orderFstate, userType } = this.state;
         return (
             <ListViewScroll
                 url={this.state.url}
                 queryParams={{
-                /* sessionId: sessionId, */
-                orderFstate: orderFstate
-            }}
+                    orderFstate: orderFstate
+                }}
                 item={obj => {
                  return (<CardItem
                     data={{...obj,userType: userType}}

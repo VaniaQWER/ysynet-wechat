@@ -241,7 +241,7 @@ class CheckDetail extends PureComponent {
             visible,
             notCause,
             orderFstate,
-            rrpairOrderGuid,
+            // rrpairOrderGuid,
             userType,
             files
         } = this.state;
@@ -270,7 +270,7 @@ class CheckDetail extends PureComponent {
                 </div>
             )
         }
-        const repair_btn = () => {
+        /* const repair_btn = () => {
             return (
                 <div className={styles.list_bottom}>
                     <div className={styles.btn_right}>
@@ -287,7 +287,7 @@ class CheckDetail extends PureComponent {
                     </div>
                 </div>
             )
-        }
+        } */
         return (
             <div className={styles.ysychat_content}>
                 <List>

@@ -149,7 +149,7 @@ class RepairForm extends PureComponent {
   }
   async componentWillMount() {
     let { userId, sessionId, assetsRecordGuid, groupName } = this.props.match.params;
-      if( groupName === 'syks'){
+      // if( groupName === 'syks'){
         const { repairReducer } = this.props; 
         this.setState({ userId, sessionId });
         if (assetsRecordGuid && !repairReducer.assetsRecord.assetsRecordGuid) {
@@ -165,12 +165,12 @@ class RepairForm extends PureComponent {
             pathname: `/workplace/${userId}/${sessionId}`
           })
         }
-    }else{
+    /* }else{
       Toast.fail('您没有报修权限', 1.5);
       this.props.history.push({
         pathname: `/workplace/${userId}/${sessionId}`
       })
-    }
+    } */
     
   }
   getColor = val => {
