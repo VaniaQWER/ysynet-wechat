@@ -145,7 +145,7 @@ class Workplace extends PureComponent {
   async getUserInfo(userId,sessionId){
     const { history, setUser, setMenu, setSessionId }= this.props;
     const data = await fetchUser({ body:{ userId: userId },type:'formData'});
-    // const data = await fetchUser({ body:{ userId: 'E2EDF6E336AC4EE28F87FF53F4F6BBD7' },type:'formData'});
+    // const data = await fetchUser({ body:{ userId: 'C12F306B156641DABA42255EC4664FAE' },type:'formData'});
         if(data.status){
           let userType = null;
           setUser({userInfo: data.result});
@@ -238,7 +238,16 @@ class Workplace extends PureComponent {
             activeStyle={false} 
             hasLine={true}
             // onClick={(el, index) => el.key === "repair"?window.location.href= `${scanUrl}/test/test.html?sessionId=${sessionId}`:el.path?history.push({ pathname:el.path }):console.log(el) }
-            onClick={(el, index) => el.key === "repair"?window.location.href= `${scanUrl}/test/test.html`:el.path?history.push({ pathname:el.path }):console.log(el) }
+            onClick={(el, index) => {
+              const { setCheckDetial } = this.props;
+              setCheckDetial({BaseInfoInfoData:{ orderFstate: undefined }});
+              // setMenuFstate({ menuFstate:  })
+              el.key === "repair"?window.location.href= `${scanUrl}/test/test.html`:
+              el.path?
+              history.push({ pathname:el.path }):
+              console.log(el) 
+              }
+          }
           />
         </List>
       )
@@ -250,5 +259,6 @@ export default withRouter(connect(state => state, dispatch => ({
   setMenu: menu =>dispatch(menuService.setMenu(menu)),
   getMenu: () => dispatch(menuService.fetchMenu()),
   setSessionId: id => dispatch(sessionService.setSessionId(id)),
-  setCheckDetial: check => dispatch(operSerVice.setCheckDetial(check))
+  setCheckDetial: check => dispatch(operSerVice.setCheckDetial(check)),
+  setMenuFstate: fstate => dispatch(operSerVice.setMenuFstate(fstate))
 }))(Workplace));

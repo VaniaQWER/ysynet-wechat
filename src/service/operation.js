@@ -14,6 +14,9 @@ const SET_BORROW_MAPPER = 'SET_BORROW_MAPPER';
 // 科室选择
 const SET_DEPT_MAPPER = 'SET_DEPT_MAPPER';
 
+// 菜单权限
+
+const SET_MENU_MAPPER = 'SET_MENU_MAPPER';
 // 设置user
 const setRepairMapper = repair => ({
   type: SET_REPAIR_MAPPER,
@@ -37,6 +40,13 @@ const setBorrowMapper = borrow => ({
 const setDeptMapper = dept => ({
   type: SET_DEPT_MAPPER,
   dept
+})
+
+// 菜单权限参数
+
+const setMenuFstateMapper = fstate => ({
+  type: SET_MENU_MAPPER,
+  fstate
 })
 
 /* 验收参数 */
@@ -64,6 +74,12 @@ export const setCheckDetial = check=> (
 */
 export const setBorrowDetial = borrow=> (
   dispatch => dispatch(setBorrowMapper(borrow))
+)
+/* 
+  菜单权限参数设置
+*/
+export const setMenuFstate = fstate=> (
+  dispatch => dispatch(setMenuFstateMapper(fstate))
 )
 
 export const setDept = dept=> (

@@ -20,7 +20,7 @@ function checkStatus(response) {
 export default function promiseRequest(url, options) {
   const defaultOptions = {
     credentials: 'include',
-    mode: 'cors',
+    //mode: 'cors',
     method: 'POST',
     'Access-Control-Allow-Credentials': true
 
@@ -43,7 +43,6 @@ export default function promiseRequest(url, options) {
     //newOptions.body =  JSON.stringify(newOptions.body);
    newOptions.body = newOptions.type ? querystring.stringify(newOptions.body) : JSON.stringify(newOptions.body);
   }
-
   return fetch(url, newOptions)
     .then(checkStatus)
     .then(response => response.json())
@@ -52,7 +51,7 @@ export default function promiseRequest(url, options) {
         Toast.fail(`请求错误: ${error.name}, ${error.message}`, 1)
       }
       if ('stack' in error && 'message' in error) {
-        Toast.fail(`请求错误: ${url}, ${error.message}`, 1)
+        Toast.fail(`请求错误: ${url}, ${error.message}`, 1);
       }
       return error;
     });

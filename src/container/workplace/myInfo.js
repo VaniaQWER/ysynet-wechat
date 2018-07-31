@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
-import { List } from 'antd-mobile'
+import { List, Modal } from 'antd-mobile'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { weUnBind } from '../../api/user';
 import styles from './style.css';
+const alert = Modal.alert;
 const Item = List.Item;
 class MyInfo extends PureComponent {
   showUserType = (userTye)=>{
@@ -15,6 +17,26 @@ class MyInfo extends PureComponent {
         return '外修组';
       default : 
         return null;
+    }
+  }
+  onClick = () =>{
+    alert('解绑', '是否确认解绑', [
+      { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+      { text: '确认', onPress: async () => this.UnBind()  },
+    ])
+  }
+  async UnBind (){
+    const postData = {};
+    const { history } = this.props;
+    postData.userId = this.props.userReducer.userInfo.userId;
+    // postData.userId = 'E2EDF6E336AC4EE28F87FF53F4F6BBD7';
+    const data = await weUnBind({ body: postData, type:'formData' });
+    document.querySelector('#closeTarget').click();
+    if(data.status && !data.result.err){
+      // 关闭浏览器
+      document.querySelector('#closeTarget').click();
+    }else{
+      history.push({ pathname:`/error` });
     }
   }
   render () {
@@ -52,9 +74,16 @@ class MyInfo extends PureComponent {
           </Item>
           <Item 
             thumb={require('../../assets/userGroup.svg')}
-            extra={<div className={styles.extra_Text}>{this.showUserType(userInfo.groupName)}</div>} >
+            extra={<div className={styles.extra_Text}>{userInfo.groupName}</div>} >
             用户组
           </Item>
+          <Item 
+            thumb={require('../../assets/weixin.svg')}
+            extra={<div className={styles.extra_Text} style={{ color:'red' }} onClick={this.onClick}>
+            {'解绑'}</div>} >
+            微信
+          </Item>
+          <a style={{ display: 'none' }} id='closeTarget' href="javascript:WeixinJSBridge.call('closeWindow');">点我啊点我啊</a>
         </List>
       </div>
     )

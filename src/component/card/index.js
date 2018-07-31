@@ -91,9 +91,7 @@ class CardItem extends PureComponent {
                                 inline
                                 onClick={() => this.props.onClick(item)}>{this.btnText(orderFstate)}</Button>
                         </div>
-                }else if(userType === 'syks'&& orderFstate ==='50'){
-                    return check_btn(orderFstate)
-                }else if(userType !== 'syks'&& orderFstate !=='50'){
+                }else{
                     return check_btn(orderFstate)
                 }
         }

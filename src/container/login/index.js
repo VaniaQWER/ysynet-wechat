@@ -29,9 +29,9 @@ class LoginForm extends PureComponent{
             console.log(values,'values')
             const data = await loginBind({body: values, type: 'formData'});
             this.setState({ loading: false });
-            let { userId } = data.result;
-            if(data.status){
-                Toast.success('登陆成功',2,()=>history.push({ pathname: `/workplace/${userId}` }));
+            let { userId, sessionId } = data.result;
+            if(data.status && !data.result.err){
+                Toast.success('登陆成功',2,()=>history.push({ pathname: `/workplace/${userId}/${sessionId}` }));
             }else{
                 Toast.fail('登陆失败',2,()=>history.push({ pathname: `/error` }))
             }

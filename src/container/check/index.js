@@ -19,6 +19,7 @@ class MyCheckList extends PureComponent {
             userId:'',
             sessionId: '',
             orderFstate:'',
+            menuFstate: '',
             userType: ''
         }
     }
@@ -27,8 +28,10 @@ class MyCheckList extends PureComponent {
         const { userId } = userInfo;
         const userType = this.props.userReducer.userInfo.groupName === undefined? null: this.props.userReducer.userInfo.groupName;
         const { sessionId } = this.props.sessionReducer.session;
+        const { menuFstate } = this.props.menuFstateReducer;
+        console.log(menuFstate,'menuFstate')
         const orderFstate = this.props.checkReducer.BaseInfoInfoData.orderFstate === undefined?'50': this.props.checkReducer.BaseInfoInfoData.orderFstate
-        this.setState({userId, userType, sessionId, orderFstate });
+        this.setState({userId, userType, sessionId, orderFstate, menuFstate });
     }
     async onClick(record) {
         const { history } = this.props;
@@ -61,12 +64,13 @@ class MyCheckList extends PureComponent {
         }
     }
     render() {
-        const { orderFstate, userType } = this.state;
+        const { orderFstate, userType, menuFstate } = this.state;
         return (
             <ListViewScroll
                 url={this.state.url}
                 queryParams={{
-                    orderFstate: orderFstate
+                    orderFstate: orderFstate,
+                    // menuFstate: menuFstate
                 }}
                 item={obj => {
                  return (<CardItem

@@ -22,3 +22,6 @@ export async function getSession(options) {
 export async function loginBind(options) {
   return promiseRequest(`${_local}/login/weBind`,options)
 }
+export async function weUnBind(options) {
+  return promiseRequest(`${_local}/login/weUnBind`,options)
+}

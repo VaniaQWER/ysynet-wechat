@@ -148,7 +148,7 @@ class RepairForm extends PureComponent {
     }
   }
   async componentWillMount() {
-    let { userId, sessionId, assetsRecordGuid, groupName } = this.props.match.params;
+    let { userId, sessionId, assetsRecordGuid } = this.props.match.params;
       // if( groupName === 'syks'){
         const { repairReducer } = this.props; 
         this.setState({ userId, sessionId });
@@ -309,7 +309,7 @@ class RepairForm extends PureComponent {
             onChange={this.imageUpdate}
             onImageClick={(index, fs) => this.setState({imageVisible: true, imgSrc: fs[index].url })}
             selectable={files.length < 3}
-            accept="image/gif,image/jpeg,image/jpg,image/png"
+            accept="image/*"
             />
         </Item>
         <WhiteSpace size="sm"/>

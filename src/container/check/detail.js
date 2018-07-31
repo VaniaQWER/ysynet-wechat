@@ -242,7 +242,7 @@ class CheckDetail extends PureComponent {
             notCause,
             orderFstate,
             // rrpairOrderGuid,
-            userType,
+            // userType,
             files
         } = this.state;
         const baseData = this.state.BaseInfoInfoData;
@@ -518,9 +518,9 @@ class CheckDetail extends PureComponent {
                         </Item>
                     </List>
                 </Modal>
-                {(userType === 'syks' && orderFstate === '50')
+                { orderFstate === '50'
                     ? syks_btn()
-                    : (userType !== 'syks' && orderFstate === '30')
+                    :  orderFstate === '30'
                         ?
                         //repair_btn()
                         null
