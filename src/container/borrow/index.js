@@ -66,8 +66,10 @@ class BorrowRecord extends PureComponent{
             this.state.visible
             &&
             <div className={styles['hidden-button']}>
-              <div style={{ backgroundColor:'#1296db' }} onClick={()=> window.location.href=`${scanUrl}/test/borrow.html?borrowFstate=00` }>借用</div>
-              <div style={{ backgroundColor: '#09c2aa' }} onClick={()=> window.location.href=`${scanUrl}/test/borrow.html?borrowFstate=01`}>归还</div>
+              <div style={{ backgroundColor:'#1296db' }} onClick={()=> window.location.href=`${scanUrl}/test/borrow.html?borrowFstate=00&userId=${userInfo.userId}` }>借用</div>
+              <div style={{ backgroundColor: '#09c2aa' }} onClick={()=> window.location.href=`${scanUrl}/test/borrow.html?borrowFstate=01&userId=${userInfo.userId}`}>归还</div>
+              {/* <div style={{ backgroundColor:'#1296db' }} onClick={()=> window.location.href=`${scanUrl}/test/borrow.html?borrowFstate=00` }>借用</div>
+              <div style={{ backgroundColor: '#09c2aa' }} onClick={()=> window.location.href=`${scanUrl}/test/borrow.html?borrowFstate=01`}>归还</div> */}
             </div>
           }
           <span 

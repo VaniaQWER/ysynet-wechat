@@ -10,7 +10,8 @@ export async function fetchUser(options) {
   return promiseRequest(`${_local}/login/getWeiXinUserInfo`,options)
 }
 export async function fetchMenu(options) {
-  return promiseRequest(`${_local}/login/getUserM`,options)
+  // return promiseRequest(`${_local}/login/getUserM`,options)
+  return promiseRequest(`${_local}/login/getWeiXinUserM`,options)
 }
 export async function updateUserName(options) {
   return promiseRequest(`${_local}/user/updateUserName`,options)

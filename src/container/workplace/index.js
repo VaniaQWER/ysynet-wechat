@@ -145,7 +145,7 @@ class Workplace extends PureComponent {
   async getUserInfo(userId,sessionId){
     const { history, setUser, setMenu, setSessionId }= this.props;
     const data = await fetchUser({ body:{ userId: userId },type:'formData'});
-    // const data = await fetchUser({ body:{ userId: 'C12F306B156641DABA42255EC4664FAE' },type:'formData'});
+    // const data = await fetchUser({ body:{ userId: 'C46B86DF5EF74EB6818CD1BD7FB2D736' },type:'formData'});
         if(data.status){
           let userType = null;
           setUser({userInfo: data.result});
@@ -159,23 +159,24 @@ class Workplace extends PureComponent {
         }
         const menu = await fetchMenu({ body:{ userId: userId },type:'formData'});
         if(menu.status){
-          let menuRes = menu.result,menuList = [];
+          /* let menuRes = menu.result,menuList = [];
           menuRes.map((item,index)=>{
             if(item.key === null && item.path === null){
               menuList = menuRes[index].subMenus;
               return null;
             }
             return null;
-          })
+          }) */
+          let menuList = menu.result;
+          console.log(menuList,'menuList')
           menuList.sort(this.compare('fsort'));
           console.log(menuList,'menuList');
           menuList.map((item,index)=>{
             item.text = item.name;
-            item.icon = menuIcon[item.key].icon;
+            item.icon = menuIcon[item.key]? menuIcon[item.key].icon: menuIcon['check'].icon;
             return null;
           });
-          menuList = [...menuList,...addMenu];
-          console.log(menuList,'menuList');
+          // menuList = [...menuList];
           setMenu(menuList);
           this.setState({ menuList: menuList  })
         }else{
@@ -242,7 +243,8 @@ class Workplace extends PureComponent {
               const { setCheckDetial } = this.props;
               setCheckDetial({BaseInfoInfoData:{ orderFstate: undefined }});
               // setMenuFstate({ menuFstate:  })
-              el.key === "repair"?window.location.href= `${scanUrl}/test/test.html`:
+              // el.key === "repair"?window.location.href= `${scanUrl}/test/test.html`:
+              el.key === "repair"?window.location.href= `${scanUrl}/test/test.html?userId=${userInfo.userId}`:
               el.path?
               history.push({ pathname:el.path }):
               console.log(el) 
